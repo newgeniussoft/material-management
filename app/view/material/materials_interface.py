@@ -62,12 +62,12 @@ class MaterialsInterface(QWidget):
         self.commandBar.setButtonTight(True)
         setFont(self.commandBar, 14)
         
-        self.addAction = Action(FluentIcon.PEOPLE, "Elève", self)
-        self.addComp = Action(FluentIcon.DICTIONARY, "Comportement", self)
+        self.addAction = Action(FluentIcon.APPLICATION, "Un matériel", self)
+        self.addComp = Action(FluentIcon.LINK, "Options", self)
         self.dropDownButtonAdd = self.createDropDownButton('Ajouter', 
                                                         FluentIcon.ADD,[self.addAction, self.addComp], self)
         
-        self.refreshAction = Action(FluentIcon.SYNC, "Actualiser", self)
+        self.refreshAction = Action(FluentIcon.SCROLL, "Mouvement", self)
         self.importAction = Action(FluentIcon.FOLDER_ADD, "Importer", self)
         self.exportActionCsv = Action(FluentIcon.QUICK_NOTE, "CSV", self)
         self.exportAction = Action(FluentIcon.DOCUMENT, "Excel", self)
