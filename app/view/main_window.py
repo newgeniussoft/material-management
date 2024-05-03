@@ -8,7 +8,7 @@ from qfluentwidgets import ( NavigationItemPosition, FluentWindow, FluentStyleSh
 from qfluentwidgets import FluentIcon as FIF
 
 from qframelesswindow import TitleBar
-from .setting_interface import SettingInterface
+#from .setting_interface import SettingInterface
 from ..common.config import ZH_SUPPORT_URL, EN_SUPPORT_URL, cfg
 from ..common.signal_bus import signalBus
 
@@ -83,7 +83,7 @@ class MainWindow(FluentWindow):
         self.initWindow()
 
         self.materialsInterface = MaterialsInterface(self)
-        self.settingInterface = SettingInterface(self)
+        #self.settingInterface = SettingInterface(self)
 
         # enable acrylic effect
         self.navigationInterface.setAcrylicEnabled(True)
@@ -105,8 +105,8 @@ class MainWindow(FluentWindow):
         self.addSubInterface(self.materialsInterface, FIF.APPLICATION, "Matériels")
         self.navigationInterface.addSeparator()
 
-        self.addSubInterface(
-            self.settingInterface, FIF.SETTING, 'Paramètres', NavigationItemPosition.BOTTOM)
+        '''self.addSubInterface(
+            self.settingInterface, FIF.SETTING, 'Paramètres', NavigationItemPosition.BOTTOM)'''
 
     def initWindow(self):
         self.resize(960, 780)
