@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
-from qfluentwidgets import MessageBoxBase, SubtitleLabel, LineEdit, ComboBox, BodyLabel
+from qfluentwidgets import MessageBoxBase, SubtitleLabel, LineEdit, ComboBox, BodyLabel, CompactSpinBox, DateEdit
 
 class editWithLabel(QVBoxLayout):
     def __init__(self, label:str,parent=None, **kwargs):
@@ -31,8 +31,20 @@ class editWithLabel(QVBoxLayout):
             self.combox.setMinimumWidth(200)
             self.combox.addItems(self.args.get("combox"))
             self.hBoxLayout.addWidget(self.combox)
-        
+            
+        if "spinbox" in self.args.keys():
+            self.compactSpinBox = CompactSpinBox(self.parent)
+            self.hBoxLayout.addWidget(self.compactSpinBox)
+            
+        if "date" in self.args.keys():
+            self.date = DateEdit(self.parent)
+            self.hBoxLayout.addWidget(self.date)
+            
         self.addLayout(self.hBoxLayout)
+        
+    
+    def getValue(self) -> int:
+        return self.compactSpinBox.value()
             
     def value(self):
         return self.combox.text()
@@ -52,26 +64,44 @@ class NewMaterielDialog(MessageBoxBase):
         self.titleLabel = SubtitleLabel('Matériels entrants', self)
 
         self.row = QHBoxLayout()
+        self.dateEdit = editWithLabel("Date", self, date="date")
         self.nameEdit = editWithLabel("Rubrique", self, placeholders=["Rubrique"])
         self.typeEdit = editWithLabel("Types", self, placeholders=["Types"])
-        
+        self.row.addLayout(self.dateEdit)
         self.row.addLayout(self.nameEdit)
         self.row.addLayout(self.typeEdit)
         
         self.row_2 = QHBoxLayout()
-        self.genderEdit = editWithLabel("Genre", self, combox=["M", "F"])
-        self.matriculeEdit = editWithLabel("Matricule", self, placeholders=["Matricule"])
-        self.matriculeEdit.lineEdit(0).textChanged.connect(self.__isValid)
-        self.gradeEdit = editWithLabel("Grade", self, combox=["EIP", "EAP"])
-        self.row_2.addLayout(self.genderEdit)
-        self.row_2.addLayout(self.matriculeEdit)
-        self.row_2.addLayout(self.gradeEdit)
+        self.brandEdit = editWithLabel("Marque", self, placeholders=["Marque"])
+        self.modelEdit = editWithLabel("Model", self, placeholders=["Model"])
+        
+        self.countSpinBox = editWithLabel("Nombre", self, spinbox="Nombre")
+        self.row_2.addLayout(self.brandEdit)
+        self.row_2.addLayout(self.modelEdit)
+        self.row_2.addLayout(self.countSpinBox)
+        
+        self.row_3 = QHBoxLayout()
+        self.accessoryEdit = editWithLabel("Accessoire", self, placeholders=["Accessoire"])
+        self.stateEdit = editWithLabel("Etat", self, placeholders=["Etat"])
+        self.fonctionalityEdit = editWithLabel("Fonctionnalité", self, placeholders=["Fonctionnalité"])
+        self.row_3.addLayout(self.accessoryEdit)
+        self.row_3.addLayout(self.stateEdit)
+        self.row_3.addLayout(self.fonctionalityEdit)
+        
+        self.row_4 = QHBoxLayout()
+        self.motifEdit = editWithLabel("Motif", self, placeholders=["Motif"])
+        self.observationEdit = editWithLabel("Observation", self, placeholders=["Observation"])
+        self.row_4.addLayout(self.motifEdit)
+        self.row_4.addLayout(self.observationEdit)
+        
 
         # add widget to view layout
         self.viewLayout.addWidget(self.titleLabel)
 
         self.viewLayout.addLayout(self.row)
         self.viewLayout.addLayout(self.row_2)
+        self.viewLayout.addLayout(self.row_3)
+        self.viewLayout.addLayout(self.row_4)
 
         # change the text of button
         self.yesButton.setText('Ajouter')
