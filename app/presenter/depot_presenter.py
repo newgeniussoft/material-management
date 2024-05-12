@@ -31,6 +31,7 @@ class DepotPresenter:
             menu = RoundMenu(parent=self.view)
             #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
             menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))
+            menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: action.update(idItem)))
             menu.addSeparator()
             menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
 

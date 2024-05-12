@@ -22,7 +22,11 @@ class MaterialPresenter:
             mtype = dialog.typeEdit.text(0);
             brand = dialog.brandEdit.text(0);
             model = dialog.modelEdit.text(0);
-            accessory = dialog.accessoryEdit.text(0);
+            accessories = dialog.accessory
+            accessory = ""
+            for acc in accessories:
+                accessory += f'{acc[0]} {acc[1]} '
+            
             state = dialog.stateEdit.text(0);
             fonctionality = dialog.fonctionalityEdit.text(0);
             motif = dialog.motifEdit.text(0);
