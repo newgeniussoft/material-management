@@ -1,15 +1,17 @@
 from PyQt5.QtCore import QThread, QPoint
 from PyQt5.QtGui import QCursor
-from ..models import DatabaseWorker
+from ..models import DatabaseWorker, MaterialModel, Material, MouvementModel
 from .menu_presenter import MenuAction
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
+from ..view import MouvementMaterielDialog
 
 class DepotPresenter:
     
     def __init__(self, parent) -> None:
         
         self.view = parent.view.depotInterface
-        self.model = parent.model
+        self.model : MaterialModel = parent.model
+        self.moveModel = MouvementModel()
         self.refresh = parent.view.depot
         self.workerThread = None
         self.defaultData = self.model.fetch_all()
@@ -19,7 +21,8 @@ class DepotPresenter:
         self.__initWidget()
         
     def __initWidget(self):
-        self.headerLabel = ["ID","Date","Rubriques","Types", "Marques", "Modele", "Nombre", "Accessoires", "Etat", "Fonctionnalité", "Motif", "Observation", ""]
+        self.headerLabel = ["Id", "Date", "Rubriques", "Types", "Marques", "Modele", "Nombre", 
+                            "Accessoires", "Etat", "Fonctionnalité", "Motif", "Observation", ""]
         self.view.tableView.setHorizontalHeaderLabels(self.headerLabel)
         self.view.tableView.contextMenuEvent = lambda event: self.mouseRightClick(event)
     
@@ -31,7 +34,7 @@ class DepotPresenter:
             menu = RoundMenu(parent=self.view)
             #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
             menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))
-            menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: action.update(idItem)))
+            menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
             menu.addSeparator()
             menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
 
@@ -39,6 +42,11 @@ class DepotPresenter:
             cur_x = self.posCur.x()
             cur_y = self.posCur.y()
             menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
+            
+    def showDialog(self, selectedId):
+        material : Material= self.model.fetch_item_by_id(selectedId)
+        dialog = MouvementMaterielDialog(material, self.view)
+        dialog.exec()
     
     def fetchData(self, data):
         self.view.progressBar.setVisible(True)
