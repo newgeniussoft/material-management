@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QVBoxLayout, QLabel, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 
 from qfluentwidgets import SegmentedWidget, TransparentDropDownPushButton, Action,\
     CommandBar, RoundMenu, FluentIcon, setFont, StrongBodyLabel , SearchLineEdit,\
@@ -8,6 +8,9 @@ from .tab import DepotTab, EntryTab, OutTab
 from ...common import Function
 
 class MaterialsInterface(QWidget):
+    
+    depot = pyqtSignal()
+    
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.func = Function()
