@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QThread, QPoint
 from PyQt5.QtGui import QCursor
-from ..models import DatabaseWorker, MaterialModel, Material, MouvementModel
+from ..models import DatabaseWorker, MaterialModel, Material, MouvementModel, Mouvement
 from .menu_presenter import MenuAction
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
 from ..view import MouvementMaterielDialog
@@ -19,6 +19,7 @@ class DepotPresenter:
         
         self.refresh.connect(lambda: self.fetchData(self.model.fetch_all()))
         self.__initWidget()
+        print(self.model.selectJoin("id","material_id", ["name", "type", "brand"], ["type", "count"], "mouvements"))
         
     def __initWidget(self):
         self.headerLabel = ["Id", "Date", "Rubriques", "Types", "Marques", "Modele", "Nombre", 
@@ -46,7 +47,17 @@ class DepotPresenter:
     def showDialog(self, selectedId):
         material : Material= self.model.fetch_item_by_id(selectedId)
         dialog = MouvementMaterielDialog(material, self.view)
-        dialog.exec()
+        if dialog.exec():
+            count = dialog.count.getValue()
+            moveType = dialog.typeCombox.combox.text()
+            self.moveModel.create(Mouvement(
+                material_id=selectedId, 
+                type=moveType, 
+                count=count))
+            updatedCount = material.count + count
+            if moveType == "Sortie" :
+                updatedCount = material.count - count
+            self.model.update_item(selectedId, count=str(updatedCount))
     
     def fetchData(self, data):
         self.view.progressBar.setVisible(True)
