@@ -9,7 +9,8 @@ from .base_presenter import MaterialPresenter
 class DepotPresenter(MaterialPresenter):
     
     def __init__(self, parent):
-        super().__init__(parent)
+        self.model = parent.model
+        super().__init__(self.model.fetch_all(),parent)
         self.setTableHeaderLabels(["Id", "Date", "Rubriques", "Types", "Marques", "Modele", "Nombre", 
                             "Accessoires", "Etat", "Fonctionnalité", "Motif", "Observation", ""])
         self.setTableContextMenu(self.mouseRightClick)

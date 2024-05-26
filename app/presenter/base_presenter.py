@@ -3,18 +3,18 @@ from ..models import MaterialModel, MouvementModel, DatabaseWorker
 
 class MaterialPresenter:
     
-    def __init__(self, parent):
-        self.__init_var(parent)
-        self.refresh.connect(lambda: self.fetchData(self.model.fetch_all()))
+    def __init__(self, data, parent):
+        self.__init_var(data,parent)
+        self.refresh.connect(lambda: self.fetchData(data))
         
-    def __init_var(self, parent):
+    def __init_var(self, data,  parent):
         self.parent = parent
         self.view = parent.view.depotInterface
         self.model : MaterialModel = parent.model
         self.moveModel = MouvementModel()
         self.refresh = parent.view.depot
         self.workerThread = None
-        self.defaultData = self.model.fetch_all()
+        self.defaultData = data
         self.fetchData(self.defaultData)
     
     def fetchData(self, data):
