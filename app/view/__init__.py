@@ -1,1 +1,1 @@
-from .material.materials_interface import MaterialsInterface
+from .material import *

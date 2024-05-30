@@ -171,7 +171,20 @@ class Model:
                 listItems.append(nVal)
             cursor.close()
         return listItems
-    
+        
+    def selectJoin(self, fromCol, toCol, columns, secondColumns, secondTable, **kwargs):
+        sql = f"SELECT ";
+        sql += ', '.join([f'{self.TABLE}.{col}' for col in columns])
+        sql += ', '+', '.join([f'{secondTable}.{col}' for col in secondColumns])
+        sql += f" FROM {self.TABLE} JOIN {secondTable} ON {self.TABLE}.{fromCol} = {secondTable}.{toCol}"
+        if len(kwargs) != 0:
+            sql += " WHERE "
+            cols = ' AND '.join([f'{secondTable}.{key}="{kwargs.get(key)}"' for key in kwargs])
+            sql += cols
+        cursor = self.conn.cursor()
+        cursor.execute(sql)
+        return cursor.fetchall()
+        
     def search(self, **kwargs):
         
         sql = f'SELECT * FROM {self.TABLE} WHERE '
