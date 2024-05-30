@@ -2,6 +2,7 @@ from ..view import MaterialsInterface, NewMaterielDialog
 from ..models import Material, MaterialModel
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
+from .out_presenter import OutPresenter
 
 class MaterialPresenter:
     
@@ -12,6 +13,7 @@ class MaterialPresenter:
         self.__actions()
         self.depotPresenter = DepotPresenter(self)
         self.inPresenter = InPresenter(self)
+        self.outPresenter = OutPresenter(self)
         
     def __actions(self):
         self.view.addAction.triggered.connect(lambda : self.showDialogNew())

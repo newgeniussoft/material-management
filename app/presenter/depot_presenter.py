@@ -1,3 +1,4 @@
+from datetime import datetime
 from PyQt5.QtCore import QPoint
 from PyQt5.QtGui import QCursor
 from ..models import Material, Mouvement
@@ -47,11 +48,16 @@ class DepotPresenter(MaterialPresenter):
         material : Material= self.model.fetch_item_by_id(selectedId)
         dialog = MouvementMaterielDialog(material, self.view)
         if dialog.exec():
+            # Current date and time
+            now = datetime.now()
+            today = now.strftime("%d/%m/%Y")
             count = dialog.count.getValue()
             moveType = dialog.typeCombox.combox.text()
+            
             self.moveModel.create(Mouvement(
                 material_id=selectedId, 
-                type=moveType, 
+                type=moveType,
+                date=today,
                 count=count))
             updatedCount = material.count + count
             if moveType == "Sortie" :

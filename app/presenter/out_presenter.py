@@ -1,18 +1,18 @@
 from ..models import MaterialModel
 from .base_presenter import MaterialPresenter
-from ..view import EntryTab
+from ..view import OutTab
 
-class InPresenter(MaterialPresenter):
+class OutPresenter(MaterialPresenter):
     
     def __init__(self, parent):
         self.model: MaterialModel = parent.model
         data = self.model.selectJoin("id", "material_id", 
                                      ['id', 'name', 'type', 'brand', 'model'], 
                                      ['type', 'count', 'date'], 
-                                     'mouvements', type="Entrée")
+                                     'mouvements', type="Sortie")
         
         super().__init__(data, parent)
-        self.view: EntryTab = parent.view.entryInterface
+        self.view: OutTab = parent.view.outInterface
         self.refresh.connect(lambda: self.fetchData(data))
         self.setTableHeaderLabels(["Id", "Rubriques", "Types","Marque", "Model", "Mouvements", "Nombre", "Date", ""])
         
