@@ -9,15 +9,19 @@ class InPresenter(MaterialPresenter):
     
     def __init__(self, parent):
         self.model: MaterialModel = parent.model
-        self.data = self.model.selectJoin("id", "material_id", 
-                                     ['name', 'type', 'brand', 'model'], 
-                                     ['type', 'count', 'date', 'id'], 
-                                     'mouvements', type="Entrée")
+        tableMove = "mouvements"
+        self.data = self.model.join("id", "material_id", 
+                                    [f"{tableMove}.id", f"{tableMove}.date", 
+                                     f"{self.model.TABLE}.name", 
+                                     f"{self.model.TABLE}.type", 
+                                     f"{self.model.TABLE}.brand",
+                                     f"{self.model.TABLE}.model",
+                                     f"{tableMove}.count"], tableMove)
         
         super().__init__(self.data , parent)
         self.view: EntryTab = parent.view.entryInterface
         self.refresh.connect(lambda: self.fetchData(self.data ))
-        self.setTableHeaderLabels(["Id", "Rubriques", "Types","Marque", "Model", "Mouvements", "Nombre", "Date", ""])
+        self.setTableHeaderLabels(["Id", "Date", "Rubriques", "Types","Marque", "Model",  "Nombre", ""])
         self.view.tableView.contextMenuEvent = lambda e : self.tableRightClick(e)
             
     def tableRightClick(self, event):

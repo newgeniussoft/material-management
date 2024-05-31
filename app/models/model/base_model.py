@@ -185,6 +185,15 @@ class Model:
         cursor.execute(sql)
         return cursor.fetchall()
         
+    def join(self, fromCol, toCol, columns, secondTable, **kwargs):
+        sql = f"SELECT ";
+        sql += ', '.join([f'{col}' for col in columns])
+        sql += f" FROM {self.TABLE} JOIN {secondTable} ON {self.TABLE}.{fromCol} = {secondTable}.{toCol}"
+        cursor = self.conn.cursor()
+        cursor.execute(sql)
+        return cursor.fetchall()
+        
+        
     def search(self, **kwargs):
         
         sql = f'SELECT * FROM {self.TABLE} WHERE '
