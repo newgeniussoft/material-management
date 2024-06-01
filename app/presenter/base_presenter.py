@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QThread, QPoint
 from ..models import MaterialModel, MouvementModel, DatabaseWorker
 
-class MaterialPresenter:
+class BasePresenter:
     
     def __init__(self, data, parent):
         self.__init_var(data,parent)

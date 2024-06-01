@@ -189,6 +189,10 @@ class Model:
         sql = f"SELECT ";
         sql += ', '.join([f'{col}' for col in columns])
         sql += f" FROM {self.TABLE} JOIN {secondTable} ON {self.TABLE}.{fromCol} = {secondTable}.{toCol}"
+        if len(kwargs) != 0:
+            sql += " WHERE "
+            cols = ' AND '.join([f'{secondTable}.{key}="{kwargs.get(key)}"' for key in kwargs])
+            sql += cols
         cursor = self.conn.cursor()
         cursor.execute(sql)
         return cursor.fetchall()

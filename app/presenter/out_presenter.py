@@ -1,8 +1,8 @@
 from ..models import MaterialModel
-from .base_presenter import MaterialPresenter
+from .base_presenter import BasePresenter
 from ..view import OutTab
 
-class OutPresenter(MaterialPresenter):
+class OutPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model: MaterialModel = parent.model

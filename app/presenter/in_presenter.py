@@ -2,10 +2,10 @@ from PyQt5.QtCore import QPoint
 from PyQt5.QtGui import QCursor
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType, MessageDialog
 from ..models import MaterialModel
-from .base_presenter import MaterialPresenter
+from .base_presenter import BasePresenter
 from ..view import EntryTab
 
-class InPresenter(MaterialPresenter):
+class InPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model: MaterialModel = parent.model
@@ -16,7 +16,7 @@ class InPresenter(MaterialPresenter):
                                      f"{self.model.TABLE}.type", 
                                      f"{self.model.TABLE}.brand",
                                      f"{self.model.TABLE}.model",
-                                     f"{tableMove}.count"], tableMove)
+                                     f"{tableMove}.count"], tableMove, type="Entrée")
         
         super().__init__(self.data , parent)
         self.view: EntryTab = parent.view.entryInterface

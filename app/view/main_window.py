@@ -76,7 +76,7 @@ class FluentTitleBar(TitleBar):
 class MainWindow(FluentWindow):
     
     currentPromotion = pyqtSignal(int)
-    refresh = pyqtSignal(list)
+    refresh = pyqtSignal()
 
     def __init__(self):
         super().__init__()

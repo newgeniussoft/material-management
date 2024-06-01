@@ -5,9 +5,9 @@ from ..models import Material, Mouvement
 from .menu_presenter import MenuAction
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
 from ..view import MouvementMaterielDialog
-from .base_presenter import MaterialPresenter
+from .base_presenter import BasePresenter
 
-class DepotPresenter(MaterialPresenter):
+class DepotPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model = parent.model
@@ -63,3 +63,4 @@ class DepotPresenter(MaterialPresenter):
             if moveType == "Sortie" :
                 updatedCount = material.count - count
             self.model.update_item(selectedId, count=str(updatedCount))
+            self.view.parent.nParent.refresh.emit()
