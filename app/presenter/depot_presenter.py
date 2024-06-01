@@ -4,7 +4,6 @@ from PyQt5.QtGui import QCursor
 from ..models import Material, Mouvement
 from .menu_presenter import MenuAction
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
-from ..view import MouvementMaterielDialog
 from .base_presenter import BasePresenter
 
 class DepotPresenter(BasePresenter):
@@ -35,7 +34,7 @@ class DepotPresenter(BasePresenter):
             menu = RoundMenu(parent=self.view)
             #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
             menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))
-            menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
+            #menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
             menu.addSeparator()
             menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
 
@@ -44,7 +43,7 @@ class DepotPresenter(BasePresenter):
             cur_y = self.posCur.y()
             menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
             
-    def showDialog(self, selectedId):
+    '''def showDialog(self, selectedId):
         material : Material= self.model.fetch_item_by_id(selectedId)
         dialog = MouvementMaterielDialog(material, self.view)
         if dialog.exec():
@@ -63,4 +62,4 @@ class DepotPresenter(BasePresenter):
             if moveType == "Sortie" :
                 updatedCount = material.count - count
             self.model.update_item(selectedId, count=str(updatedCount))
-            self.view.parent.nParent.refresh.emit()
+            self.view.parent.nParent.refresh.emit() '''
