@@ -34,16 +34,17 @@ class MouvementMaterialDialog(Dialog):
         
         self.textLayout.addLayout(self.row)
         self.textLayout.addLayout(self.row2)
-        #self.viewLayout.addLayout(self.row3)
         self.textLayout.addLayout(ValueWithLabel("Observation", material.fonctionality))
-        
-        
         self.textLayout.addWidget(StrongBodyLabel("Mouvement"))
         
-        self.typeCombox = ComboxEditWithLabel("Type", ["Entrée", "Sortie"], self)
-        self.count = SpinBoxEditWithLabel("Nombre", self)
+        self.typeCombox = ComboxEditWithLabel("Type", ["Entrée", "Sortie"])
+        self.count = SpinBoxEditWithLabel("Nombre")
+        self.motif = LineEditWithLabel("Motif")
         
         self.row3 = QHBoxLayout()
         self.row3.addLayout(self.typeCombox)
         self.row3.addLayout(self.count)
         self.textLayout.addLayout(self.row3)
+        self.textLayout.addLayout(self.motif)
+        
+        self.setFixedWidth(600)
