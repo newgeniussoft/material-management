@@ -3,8 +3,8 @@ from PyQt5.QtCore import QUrl, QSize, Qt, pyqtSignal
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtWidgets import QApplication, QFrame, QHBoxLayout, QLabel, QVBoxLayout
 
-from qfluentwidgets import ( NavigationItemPosition, FluentWindow, FluentStyleSheet,
-                            SplashScreen, TitleLabel, Dialog, BodyLabel)
+from qfluentwidgets import NavigationItemPosition, FluentWindow, FluentStyleSheet, \
+                            SplashScreen, TitleLabel, Dialog, BodyLabel, MessageDialog
 from qfluentwidgets import FluentIcon as FIF
 
 from qframelesswindow import TitleBar
@@ -76,7 +76,7 @@ class FluentTitleBar(TitleBar):
 class MainWindow(FluentWindow):
     
     currentPromotion = pyqtSignal(int)
-    refresh = pyqtSignal(list)
+    refresh = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -84,7 +84,6 @@ class MainWindow(FluentWindow):
 
         self.materialsInterface = MaterialsInterface(self)
         #self.settingInterface = SettingInterface(self)
-
         # enable acrylic effect
         self.navigationInterface.setAcrylicEnabled(True)
         self.connectSignalToSlot()
@@ -140,9 +139,10 @@ class MainWindow(FluentWindow):
         super().resizeEvent(e)
         if hasattr(self, 'splashScreen'):
             self.splashScreen.resize(self.size())
+            
     
     def closeEvent(self, event):
-        
+
         exitDialog = Dialog(
             'Quitter', 'Voulez vous quitter vraiment?',
             self

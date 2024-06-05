@@ -10,6 +10,7 @@ from ...common import Function
 class MaterialsInterface(QWidget):
     
     depot = pyqtSignal()
+    refresh = pyqtSignal()
     
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -65,22 +66,16 @@ class MaterialsInterface(QWidget):
         self.commandBar.setButtonTight(True)
         setFont(self.commandBar, 14)
         
-        self.addAction = Action(FluentIcon.APPLICATION, "Un matériel", self)
-        self.addComp = Action(FluentIcon.LINK, "Options", self)
-        self.dropDownButtonAdd = self.createDropDownButton('Ajouter', 
-                                                        FluentIcon.ADD,[self.addAction, self.addComp], self)
+        self.addAction = Action(FluentIcon.APPLICATION, "Nouveau matériel", self)
         
-        self.refreshAction = Action(FluentIcon.SCROLL, "Mouvement", self)
-        self.importAction = Action(FluentIcon.FOLDER_ADD, "Importer", self)
+        self.importAction = Action(FluentIcon.DOWNLOAD, "Importer", self)
         self.exportActionCsv = Action(FluentIcon.QUICK_NOTE, "CSV", self)
         self.exportAction = Action(FluentIcon.DOCUMENT, "Excel", self)
         self.dropDownButtonExp = self.createDropDownButton('Exporter', 
                                                         FluentIcon.SHARE,[self.exportAction, self.exportActionCsv], self)
         self.deleteAction = Action(FluentIcon.DELETE, "Supprimer tous", self)   
         
-        self.commandBar.addWidget(self.dropDownButtonAdd)
-
-        self.commandBar.addAction(self.refreshAction)
+        self.commandBar.addAction(self.addAction)
         self.commandBar.addAction(self.importAction)
         self.commandBar.addWidget(self.dropDownButtonExp)
         self.commandBar.addSeparator()

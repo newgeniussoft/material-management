@@ -1,7 +1,7 @@
 from qfluentwidgets import MessageBoxBase, StrongBodyLabel, BodyLabel, ComboBox, SubtitleLabel
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
 from ...models import Material
-from ...components import editWithLabel
+from ...components import ComboxEditWithLabel, SpinBoxEditWithLabel
 
 class ValueWithLabel(QVBoxLayout):
     def __init__(self, label:str, value:str, parent=None):
@@ -35,8 +35,8 @@ class MouvementMaterielDialog(MessageBoxBase):
         
         self.viewLayout.addWidget(StrongBodyLabel("Mouvement"))
         
-        self.typeCombox = editWithLabel("Type", self, combox=["Entrée", "Sortie"])
-        self.count = editWithLabel("Nombre", self, spinbox="Nombre")
+        self.typeCombox = ComboxEditWithLabel("Type", ["Entrée", "Sortie"], self)
+        self.count = SpinBoxEditWithLabel("Nombre", self)
         
         self.row3 = QHBoxLayout()
         self.row3.addLayout(self.typeCombox)

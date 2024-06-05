@@ -1,30 +1,31 @@
 from datetime import datetime
 from PyQt5.QtCore import QPoint
 from PyQt5.QtGui import QCursor
-from ..models import Material, Mouvement
-from .menu_presenter import MenuAction
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
-from ..view import MouvementMaterielDialog
-from .base_presenter import MaterialPresenter
+from .base_presenter import BasePresenter
+from .menu_presenter import MenuAction
+from ..models import Material, Mouvement
+from ..view import MouvementMaterialDialog
 
-class DepotPresenter(MaterialPresenter):
+class DepotPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model = parent.model
         super().__init__(self.model.fetch_all(),parent)
-        self.setTableHeaderLabels(["Id", "Date", "Rubriques", "Types", "Marques", "Modele", "Nombre", 
+        self.setTableHeaderLabels(["Id", "Date", "Nombre", "Rubriques", "Types", "Marques", "Modele", 
                             "Accessoires", "Etat", "Fonctionnalité", "Motif", "Observation", ""])
         self.setTableContextMenu(self.mouseRightClick)
+        self.view.parent.refresh.connect(lambda: self.fetchData(self.model.fetch_all()))
         
     def handleResult(self, data: list):
         super().handleResult(data)
         listData = []
         for material in data:
             listData.append(
-                [material.id, material.date, material.name, 
-                 material.type, material.brand, material.model,
-                 material.count, material.accessory, material.state,  
-                 material.fonctionality,material.motif, material.observation])
+                [material.id, material.date, material.count, 
+                 material.name, material.type, material.brand, material.model, 
+                 material.accessory, material.state, material.fonctionality,material.motif, 
+                 material.observation])
         self.view.tableView.setData(listData)
     
     def mouseRightClick(self, event):
@@ -46,12 +47,12 @@ class DepotPresenter(MaterialPresenter):
             
     def showDialog(self, selectedId):
         material : Material= self.model.fetch_item_by_id(selectedId)
-        dialog = MouvementMaterielDialog(material, self.view)
+        dialog = MouvementMaterialDialog(material, self.view)
         if dialog.exec():
             # Current date and time
             now = datetime.now()
             today = now.strftime("%d/%m/%Y")
-            count = dialog.count.getValue()
+            count = dialog.count.spinbox.value()
             moveType = dialog.typeCombox.combox.text()
             
             self.moveModel.create(Mouvement(
@@ -63,3 +64,4 @@ class DepotPresenter(MaterialPresenter):
             if moveType == "Sortie" :
                 updatedCount = material.count - count
             self.model.update_item(selectedId, count=str(updatedCount))
+            self.view.parent.nParent.refresh.emit()

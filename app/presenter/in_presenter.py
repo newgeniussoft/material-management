@@ -2,28 +2,37 @@ from PyQt5.QtCore import QPoint
 from PyQt5.QtGui import QCursor
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType, MessageDialog
 from ..models import MaterialModel
-from .base_presenter import MaterialPresenter
+from .base_presenter import BasePresenter
 from ..view import EntryTab
 
-class InPresenter(MaterialPresenter):
+class InPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model: MaterialModel = parent.model
-        tableMove = "mouvements"
-        self.data = self.model.join("id", "material_id", 
-                                    [f"{tableMove}.id", f"{tableMove}.date", 
-                                     f"{self.model.TABLE}.name", 
-                                     f"{self.model.TABLE}.type", 
-                                     f"{self.model.TABLE}.brand",
-                                     f"{self.model.TABLE}.model",
-                                     f"{tableMove}.count"], tableMove)
+        self.data = self.fetchAll()
         
         super().__init__(self.data , parent)
         self.view: EntryTab = parent.view.entryInterface
         self.refresh.connect(lambda: self.fetchData(self.data ))
-        self.setTableHeaderLabels(["Id", "Date", "Rubriques", "Types","Marque", "Model",  "Nombre", ""])
+        self.setTableHeaderLabels(["Id", "Date", "Nombre", "Rubriques", "Types","Marque", "Model", ""])
         self.view.tableView.contextMenuEvent = lambda e : self.tableRightClick(e)
-            
+        self.view.parent.refresh.connect(lambda: self.fetchData(self.fetchAll()))
+        
+    def fetchAll(self):
+        tableMove = "mouvements"
+        return self.model.join(
+            "id", "material_id", 
+            [f"{tableMove}.id", f"{tableMove}.date",
+             f"{tableMove}.count",
+             f"{self.model.TABLE}.name", 
+             f"{self.model.TABLE}.type", 
+             f"{self.model.TABLE}.brand",
+             f"{self.model.TABLE}.model"
+            ], 
+            tableMove, 
+            type="Entrée"
+        )
+        
     def tableRightClick(self, event):
         selectedItems = self.view.tableView.selectedItems()
         if (len(selectedItems) != 0):
