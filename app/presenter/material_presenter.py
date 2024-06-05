@@ -1,5 +1,5 @@
 from ..view import MaterialsInterface, AddMaterialDialog
-from ..models import Material, MaterialModel
+from ..models import Material, MaterialModel, MouvementModel, Mouvement
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
 from .out_presenter import OutPresenter
@@ -10,6 +10,7 @@ class MaterialPresenter:
     def __init__(self, view:MaterialsInterface, model: MaterialModel):
         self.view = view
         self.model = model
+        self.moveModel = MouvementModel()
         self.__actions()
         self.depotPresenter = DepotPresenter(self)
         self.inPresenter = InPresenter(self)
@@ -43,4 +44,7 @@ class MaterialPresenter:
                                 fonctionality=fonctionality,motif=motif, 
                                 observation=observation, count=count)
             self.model.create(material)
-            self.view.depot.emit()
+            items = self.model.fetch_all()
+            lastMaterial: Material = items[len(items) - 1]
+            self.moveModel.create(Mouvement(date=date, material_id=lastMaterial.id, type="Entrée", count=count))
+            self.view.refresh.emit()

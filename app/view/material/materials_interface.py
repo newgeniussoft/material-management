@@ -10,6 +10,7 @@ from ...common import Function
 class MaterialsInterface(QWidget):
     
     depot = pyqtSignal()
+    refresh = pyqtSignal()
     
     def __init__(self, parent=None):
         super().__init__(parent=parent)
