@@ -1,4 +1,4 @@
-from ..view import MaterialsInterface, AddMaterialDialog
+from ..view import MaterialsInterface, AddMaterialDialog, NewMaterialDialog
 from ..models import Material, MaterialModel, MouvementModel, Mouvement
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
@@ -20,6 +20,10 @@ class MaterialPresenter:
         self.view.addAction.triggered.connect(lambda : self.showDialogNew())
         
     def showDialogNew(self):
+        dialog = NewMaterialDialog(self.view)
+        dialog.exec()
+        
+    def showDialogNewOld(self):
         dialog = AddMaterialDialog(self.view)
         if dialog.exec():
             date = dialog.dateEdit.lineEdit.text()

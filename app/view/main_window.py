@@ -113,7 +113,7 @@ class MainWindow(FluentWindow):
         self.setMicaEffectEnabled(cfg.get(cfg.micaEnabled))
         self.fluentTitleBar = FluentTitleBar(self)
         self.fluentTitleBar.setIcon(QIcon('app/resource/images/logo_eniap.png'))
-        self.fluentTitleBar.titleLabel.setText('Gestion de comportement')
+        self.fluentTitleBar.titleLabel.setText('Gestion de materiel')
         self.setTitleBar(self.fluentTitleBar)
 
         # create splash screen
