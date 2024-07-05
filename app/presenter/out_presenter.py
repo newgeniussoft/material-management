@@ -6,16 +6,13 @@ class OutPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model: MaterialModel = parent.model
-        data = self.model.selectJoin("id", "material_id", 
-                                     ['id', 'name', 'type', 'brand', 'model'], 
-                                     ['type', 'count', 'date'], 
-                                     'mouvements', type="Sortie")
+        data = []
         
         super().__init__(data, parent)
-        self.view: OutTab = parent.view.outInterface
-        self.refresh.connect(lambda: self.fetchData(data))
+        '''self.view: OutTab = parent.view.outInterface
+        self.refresh.connect(lambda: self.fetchData(data))'''
         self.setTableHeaderLabels(["Id", "Rubriques", "Types","Marque", "Model", "Mouvements", "Nombre", "Date", ""])
         
-    def handleResult(self, data: list):
+    '''def handleResult(self, data: list):
         super().handleResult(data)
-        self.view.tableView.setData(data)
+        self.view.tableView.setData(data)'''

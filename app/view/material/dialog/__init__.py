@@ -1,3 +1,2 @@
-from .add_material_dialog import AddMaterialDialog
 from .mouvement_material_dialog import MouvementMaterialDialog
 from .new_material_dialog import NewMaterialDialog

@@ -12,20 +12,23 @@ class DepotPresenter(BasePresenter):
     def __init__(self, parent):
         self.model = parent.model
         super().__init__(self.model.fetch_all(),parent)
-        self.setTableHeaderLabels(["Id", "Date", "Nombre", "Rubriques", "Types", "Marques", "Modele", 
-                            "Accessoires", "Etat", "Fonctionnalité", "Motif", "Observation", ""])
+        self.setTableHeaderLabels(["ID", "DESIGNATION DE MATERIEL", 
+                                   "EN COMPTE", "EN BON", "EN MAGASIN", 
+                                   "ETAT EN MAGASIN\nBE", "ETAT EN MAGASIN\nPANNE", 
+                                   "GRADE NOM ET PRENOM", "CONTACT", "MOTIF", "LIEU", 
+                                   "DATE DE PERCEPTION","DATE DE REINTEGRATION", 
+                                   "ETAT DU MAT LORS DE LA REINTEGRATION"])
         self.setTableContextMenu(self.mouseRightClick)
         self.view.parent.refresh.connect(lambda: self.fetchData(self.model.fetch_all()))
         
-    def handleResult(self, data: list):
+    def handleResult(self, data: list[Material]):
         super().handleResult(data)
         listData = []
         for material in data:
             listData.append(
-                [material.id, material.date, material.count, 
-                 material.name, material.type, material.brand, material.model, 
-                 material.accessory, material.state, material.fonctionality,material.motif, 
-                 material.observation])
+                [material.id, material.name, material.into_account, material.in_good, 
+                 material.in_store, material.be, material.breakdown, f'{material.grade} {material.full_name}',
+                 material.contact, material.motif, material.place, material.state_mat_integr] )
         self.view.tableView.setData(listData)
     
     def mouseRightClick(self, event):

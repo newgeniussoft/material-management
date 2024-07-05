@@ -1,11 +1,10 @@
-from ..view import MaterialsInterface, AddMaterialDialog, NewMaterialDialog
+from ..view import MaterialsInterface, NewMaterialDialog
 from ..models import Material, MaterialModel, MouvementModel, Mouvement
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
 from .out_presenter import OutPresenter
 
 class MaterialPresenter:
-    
     
     def __init__(self, view:MaterialsInterface, model: MaterialModel):
         self.view = view
@@ -21,34 +20,35 @@ class MaterialPresenter:
         
     def showDialogNew(self):
         dialog = NewMaterialDialog(self.view)
-        dialog.exec()
-        
-    def showDialogNewOld(self):
-        dialog = AddMaterialDialog(self.view)
         if dialog.exec():
-            date = dialog.dateEdit.lineEdit.text()
-            name = dialog.nameEdit.lineEdit.text();
-            mtype = dialog.typeEdit.lineEdit.text()
-            brand = dialog.brandEdit.lineEdit.text()
-            model = dialog.modelEdit.lineEdit.text()
-            accessories = dialog.accessory
-            accessory = ""
-            for acc in accessories:
-                accessory += f'{acc[0]} {acc[1]} '
-            
-            state = dialog.stateEdit.lineEdit.text()
-            fonctionality = dialog.fonctionalityEdit.lineEdit.text()
-            motif = dialog.motifEdit.lineEdit.text();
-            observation = dialog.observationEdit.lineEdit.text()
-            count = dialog.countSpinBox.spinbox.text()
-            material = Material(date=date,
-                                name=name, type=mtype, 
-                                brand=brand, model=model, 
-                                accessory=accessory, state=state, 
-                                fonctionality=fonctionality,motif=motif, 
-                                observation=observation, count=count)
+            name = dialog.nameEdit.lineEdit.text()
+            intoAccount = dialog.intoAccountSpinBox.spinbox.value()
+            inGood = dialog.inGoodSpinBox.spinbox.value()
+            inStore = dialog.inStoreSpinBox.spinbox.value()
+            be = dialog.beSpinBox.spinbox.value()
+            breakdown = dialog.breakdownSpinBox.spinbox.value()
+            grade = dialog.gradeEdit.lineEdit.text()
+            fullName = dialog.fullNameEdit.lineEdit.text()
+            contact = dialog.contactEdit.lineEdit.text()
+            motif = dialog.motifEdit.lineEdit.text()
+            place = dialog.placeEdit.lineEdit.text()
+            datePerc = dialog.datePercEdit.lineEdit.text()
+            dateReinteg = dialog.dateReintegEdit.lineEdit.text()
+            stateMatIntegr = dialog.stateMatIntegr.lineEdit.text()
+            material = Material(
+                name         = name,
+                into_account = intoAccount,
+                in_good      = inGood,
+                in_store     = inStore,
+                be           = be,
+                breakdown    = breakdown,
+                grade        = grade,
+                full_name    = fullName,
+                contact      = contact,
+                motif        = motif,
+                place        = place,
+                date_perc    = datePerc,
+                date_reinteg = dateReinteg,
+                state_mat_integr=stateMatIntegr
+            )
             self.model.create(material)
-            items = self.model.fetch_all()
-            lastMaterial: Material = items[len(items) - 1]
-            self.moveModel.create(Mouvement(date=date, material_id=lastMaterial.id, type="Entrée", count=count))
-            self.view.refresh.emit()
