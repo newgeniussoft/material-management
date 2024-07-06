@@ -11,7 +11,7 @@ class OutPresenter(BasePresenter):
         super().__init__(data, parent)
         '''self.view: OutTab = parent.view.outInterface
         self.refresh.connect(lambda: self.fetchData(data))'''
-        self.setTableHeaderLabels(["Id", "Rubriques", "Types","Marque", "Model", "Mouvements", "Nombre", "Date", ""])
+        '''self.setTableHeaderLabels(["Id", "Rubriques", "Types","Marque", "Model", "Mouvements", "Nombre", "Date", ""])'''
         
     '''def handleResult(self, data: list):
         super().handleResult(data)
