@@ -34,7 +34,7 @@ class MaterialPresenter:
             place = dialog.placeEdit.lineEdit.text()
             datePerc = dialog.datePercEdit.lineEdit.text()
             dateReinteg = dialog.dateReintegEdit.lineEdit.text()
-            stateMatIntegr = dialog.stateMatIntegr.lineEdit.text()
+            stateMatIntegr = dialog.stateMatIntegr.combox.currentText()
             material = Material(
                 name         = name,
                 into_account = intoAccount,
@@ -52,3 +52,4 @@ class MaterialPresenter:
                 state_mat_integr=stateMatIntegr
             )
             self.model.create(material)
+            self.view.depot.emit()

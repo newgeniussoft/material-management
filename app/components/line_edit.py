@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtCore import QDate
 from qfluentwidgets import LineEdit, BodyLabel, ComboBox, CompactSpinBox, DateEdit
-
+from datetime import datetime
 
 class LineEditWithLabel(QVBoxLayout):
     def __init__(self, label:str, parent=None):
@@ -25,6 +25,11 @@ class DateEditWithLabel(QVBoxLayout):
     def text(self) -> str:
         value = self.lineEdit.text()
         return value if value != "01/01/1950" else ""
+    
+    def setDateNow(self):
+        cDate = datetime.now()
+        self.lineEdit.setDate(QDate(cDate.year, cDate.month, cDate.day))
+        
         
 class ComboxEditWithLabel(QVBoxLayout):
     def __init__(self, label:str, data=[], parent=None):

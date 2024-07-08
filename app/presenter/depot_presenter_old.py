@@ -21,10 +21,6 @@ class DepotPresenter(BasePresenter):
         self.setTableContextMenu(self.mouseRightClick)
         self.view.parent.refresh.connect(lambda: self.fetchData(self.model.fetch_all()))
         
-    def fetchData(self, data):
-        nData = self.model.fetch_all()
-        return super().fetchData(nData)
-        
     def handleResult(self, data: list[Material]):
         super().handleResult(data)
         listData = []
@@ -34,6 +30,8 @@ class DepotPresenter(BasePresenter):
                  material.in_store, material.be, material.breakdown, f'{material.grade} {material.full_name}',
                  material.contact, material.motif, material.place, material.date_perc, material.date_reinteg, material.state_mat_integr] )
         self.view.tableView.setData(listData)
+        self.view.tableView.setSpan(0, 0, 3, 1)   
+        self.view.tableView.setSpan(0, 1, 3, 1)
     
     def mouseRightClick(self, event):
         selectedItems = self.view.tableView.selectedItems()
@@ -42,9 +40,9 @@ class DepotPresenter(BasePresenter):
             action = MenuAction(self)
             menu = RoundMenu(parent=self.view)
             #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
-            '''menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))
+            menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))
             menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
-            menu.addSeparator()'''
+            menu.addSeparator()
             menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
 
             self.posCur = QCursor().pos()

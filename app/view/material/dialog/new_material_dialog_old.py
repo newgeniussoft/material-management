@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QCursor
 from qfluentwidgets import Dialog, SubtitleLabel, StrongBodyLabel, PrimaryPushButton, FluentIcon, \
     RoundMenu, Action, MenuAnimationType
-from ....components import LineEditWithLabel, DateEditWithLabel, SpinBoxEditWithLabel, TableView, ComboxEditWithLabel
+from ....components import LineEditWithLabel, DateEditWithLabel, SpinBoxEditWithLabel, TableView
 
 class NewMaterialDialog(Dialog):
 
@@ -31,23 +31,20 @@ class NewMaterialDialog(Dialog):
         self.gradeEdit = LineEditWithLabel("GRADE")
         self.fullNameEdit = LineEditWithLabel("NOM ET PRENOMS")
         self.contactEdit = LineEditWithLabel("CONTACT")
+        self.motifEdit = LineEditWithLabel("MOTIF")
+        self.placeEdit = LineEditWithLabel("LIEU")
         self.row_2.addLayout(self.gradeEdit)
         self.row_2.addLayout(self.fullNameEdit)
         self.row_2.addLayout(self.contactEdit)
+        self.row_2.addLayout(self.motifEdit)
+        self.row_2.addLayout(self.placeEdit)
         self.row_3 = QHBoxLayout()
-        self.motifEdit = LineEditWithLabel("MOTIF")
-        self.placeEdit = LineEditWithLabel("LIEU")
-        self.row_3.addLayout(self.motifEdit)
-        self.row_3.addLayout(self.placeEdit)
-        self.row_4 = QHBoxLayout()
         self.datePercEdit = DateEditWithLabel("DATE DE PERCEPTION")
-        self.datePercEdit.setDateNow()
         self.dateReintegEdit = DateEditWithLabel("DATE DE REINTEGRATION")
-        self.dateReintegEdit.setDateNow()
-        self.stateMatIntegr = ComboxEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION", ['BONNE ETAT', 'EN PANNE'])
-        self.row_4.addLayout(self.datePercEdit)
-        self.row_4.addLayout(self.dateReintegEdit)
-        self.row_4.addLayout(self.stateMatIntegr)
+        self.stateMatIntegr = DateEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION")
+        self.row_3.addLayout(self.datePercEdit)
+        self.row_3.addLayout(self.dateReintegEdit)
+        self.row_3.addLayout(self.stateMatIntegr)
         
         '''
         self.dateEdit = DateEditWithLabel("Date")
@@ -104,7 +101,6 @@ class NewMaterialDialog(Dialog):
         self.textLayout.addLayout(self.row)
         self.textLayout.addLayout(self.row_2)
         self.textLayout.addLayout(self.row_3)
-        self.textLayout.addLayout(self.row_4)
         '''
         self.textLayout.addLayout(self.row_4)
         self.textLayout.addLayout(self.row_5)
