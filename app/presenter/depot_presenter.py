@@ -14,7 +14,7 @@ class DepotPresenter(BasePresenter):
         super().__init__(self.model.fetch_all(),parent)
         self.setTableHeaderLabels(["ID", "DESIGNATION DE MATERIEL", 
                                    "EN COMPTE", "EN BON", "EN MAGASIN", 
-                                   "ETAT EN MAGASIN\nBE", "ETAT EN MAGASIN\nPANNE", 
+                                   "ETAT EN MAGASIN\nBONNE ETAT", "ETAT EN MAGASIN\nPANNE", 
                                    "GRADE NOM ET PRENOM", "CONTACT", "MOTIF", "LIEU", 
                                    "DATE DE PERCEPTION","DATE DE REINTEGRATION", 
                                    "ETAT DU MAT LORS DE LA REINTEGRATION"])
@@ -28,8 +28,10 @@ class DepotPresenter(BasePresenter):
             listData.append(
                 [material.id, material.name, material.into_account, material.in_good, 
                  material.in_store, material.be, material.breakdown, f'{material.grade} {material.full_name}',
-                 material.contact, material.motif, material.place, material.state_mat_integr] )
+                 material.contact, material.motif, material.place, material.date_perc, material.date_reinteg, material.state_mat_integr] )
         self.view.tableView.setData(listData)
+        self.view.tableView.setSpan(0, 0, 3, 1)   
+        self.view.tableView.setSpan(0, 1, 3, 1)
     
     def mouseRightClick(self, event):
         selectedItems = self.view.tableView.selectedItems()
