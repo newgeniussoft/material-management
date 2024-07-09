@@ -81,7 +81,7 @@ class MaterialsInterface(QWidget):
         self.commandBar.addSeparator()
         self.commandBar.addAction(self.deleteAction)
         
-        self.titleLabel = StrongBodyLabel("Base des données")
+        self.titleLabel = StrongBodyLabel("Matériels au dépot")
         
         self.searchLineEdit = SearchLineEdit(self)
         self.searchLineEdit.setPlaceholderText("Recherche")

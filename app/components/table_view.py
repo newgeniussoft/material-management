@@ -22,7 +22,7 @@ class TableView(QTableWidget):
         themeColor = f'rgba{str(cfg.get(cfg.themeColor).getRgb())}'
         if theme == "auto":
             theme = "light" if darkdetect.isLight() else "dark"
-        with open(f'app/resource/{theme}.qss', encoding='utf-8') as f:
+        with open(f'app/resource/qss/{theme}/table_view.qss', encoding='utf-8') as f:
             self.setStyleSheet(f.read().replace("#327bcc", themeColor))
     
     def setHorizontalHeaderLabels(self, labels: Iterable[str | None]) -> None:
