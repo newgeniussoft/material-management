@@ -1,5 +1,5 @@
 from ..view import MaterialsInterface, NewMaterialDialog, InitialMaterialDialog, LotDialog
-from ..models import Material, MaterialModel, MouvementModel, Mouvement
+from ..models import Material, MaterialModel, MouvementModel, Mouvement, Lot, LotModel
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
 from .out_presenter import OutPresenter
@@ -10,6 +10,7 @@ class MaterialPresenter:
         self.view = view
         self.model = model
         self.moveModel = MouvementModel()
+        self.lotModel = LotModel()
         self.__actions()
         self.depotPresenter = DepotPresenter(self)
         self.inPresenter = InPresenter(self)
@@ -21,8 +22,21 @@ class MaterialPresenter:
         
     def showLotDialog(self):
         dialog = LotDialog(self.view)
+        data = self.lotModel.fetch_all()
+        lots = [[item.id, item.name] for item in data]
+        dialog.table.setData(lots)
+        dialog.yesBtn.clicked.connect(lambda: self.createUpdateLots(dialog))
         dialog.exec()
-        
+            
+    def createUpdateLots(self, dialog: LotDialog):
+        data = dialog.table.getData()
+        lots = [Lot(id=int(item[0]) if item[0] != "" else 0, name=item[1]) for item in data]
+        for lot in lots:
+            if lot.id == 0:
+                self.lotModel.create(lot)
+            else:
+                self.lotModel.update_item(lot.id, name=lot.name)
+            
     def showDialogNew(self):
         dialog = InitialMaterialDialog(self.view)
         if dialog.exec():
