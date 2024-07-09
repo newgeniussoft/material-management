@@ -24,6 +24,7 @@ class NewMaterialDialog(Dialog):
         self.breakdownSpinBox = SpinBoxEditWithLabel("PANNE")
         self.row.addLayout(self.nameEdit)
         self.row.addLayout(self.intoAccountSpinBox)
+        self.row.addLayout(self.inGoodSpinBox)
         self.row.addLayout(self.inStoreSpinBox)
         self.row.addLayout(self.beSpinBox)
         self.row.addLayout(self.breakdownSpinBox)
