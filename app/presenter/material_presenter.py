@@ -1,4 +1,4 @@
-from ..view import MaterialsInterface, NewMaterialDialog
+from ..view import MaterialsInterface, NewMaterialDialog, InitialMaterialDialog
 from ..models import Material, MaterialModel, MouvementModel, Mouvement
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
@@ -19,9 +19,10 @@ class MaterialPresenter:
         self.view.addAction.triggered.connect(lambda : self.showDialogNew())
         
     def showDialogNew(self):
-        dialog = NewMaterialDialog(self.view)
+        dialog = InitialMaterialDialog(self.view)
         if dialog.exec():
-            name = dialog.nameEdit.lineEdit.text()
+            print('hello')
+            '''name = dialog.nameEdit.lineEdit.text()
             intoAccount = dialog.intoAccountSpinBox.spinbox.value()
             inGood = dialog.inGoodSpinBox.spinbox.value()
             inStore = dialog.inStoreSpinBox.spinbox.value()
@@ -52,4 +53,4 @@ class MaterialPresenter:
                 state_mat_integr=stateMatIntegr
             )
             self.model.create(material)
-            self.view.depot.emit()
+            self.view.depot.emit()'''
