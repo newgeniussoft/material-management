@@ -11,6 +11,9 @@ class LineEditWithLabel(QVBoxLayout):
         self.label = BodyLabel(label)
         self.addWidget(self.label)
         self.addWidget(self.lineEdit)
+        
+    def text(self) -> str:
+        return self.lineEdit.text()
 
 class DateEditWithLabel(QVBoxLayout):
     def __init__(self, label:str, parent=None):

@@ -1,4 +1,4 @@
-from ..view import MaterialsInterface, NewMaterialDialog, InitialMaterialDialog
+from ..view import MaterialsInterface, NewMaterialDialog, InitialMaterialDialog, LotDialog
 from ..models import Material, MaterialModel, MouvementModel, Mouvement
 from .depot_presenter import DepotPresenter
 from .in_presenter import InPresenter
@@ -17,6 +17,11 @@ class MaterialPresenter:
         
     def __actions(self):
         self.view.addAction.triggered.connect(lambda : self.showDialogNew())
+        self.view.addLot.triggered.connect(lambda : self.showLotDialog())
+        
+    def showLotDialog(self):
+        dialog = LotDialog(self.view)
+        dialog.exec()
         
     def showDialogNew(self):
         dialog = InitialMaterialDialog(self.view)

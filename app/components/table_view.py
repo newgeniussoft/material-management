@@ -38,3 +38,19 @@ class TableView(QTableWidget):
                 self.setItem(row, col, QTableWidgetItem(str(value)))
                 
         self.resizeColumnsToContents()
+    
+                        
+    def getData(self) -> list:
+        row_count = self.rowCount()
+        column_count = self.columnCount()
+        table_data = []
+        for row in range(row_count):
+            row_data = []
+            for column in range(column_count):
+                item = self.item(row, column)
+                if item is not None:
+                    row_data.append(item.text())
+                else:
+                    row_data.append("")
+            table_data.append(row_data)
+        return table_data

@@ -67,7 +67,7 @@ class MaterialsInterface(QWidget):
         setFont(self.commandBar, 14)
         
         self.addAction = Action(FluentIcon.APPLICATION, "Nouveau matériel", self)
-        
+        self.addLot = Action(FluentIcon.FOLDER, "Lot", self)
         self.importAction = Action(FluentIcon.DOWNLOAD, "Importer", self)
         self.exportActionCsv = Action(FluentIcon.QUICK_NOTE, "CSV", self)
         self.exportAction = Action(FluentIcon.DOCUMENT, "Excel", self)
@@ -76,6 +76,7 @@ class MaterialsInterface(QWidget):
         self.deleteAction = Action(FluentIcon.DELETE, "Supprimer tous", self)   
         
         self.commandBar.addAction(self.addAction)
+        self.commandBar.addAction(self.addLot)
         self.commandBar.addAction(self.importAction)
         self.commandBar.addWidget(self.dropDownButtonExp)
         self.commandBar.addSeparator()
