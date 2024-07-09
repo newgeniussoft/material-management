@@ -30,13 +30,18 @@ class MaterialPresenter:
             
     def createUpdateLots(self, dialog: LotDialog):
         data = dialog.table.getData()
+        ids = [int(item[0]) if item[0] != '' else 0 for item in data]
         lots = [Lot(id=int(item[0]) if item[0] != "" else 0, name=item[1]) for item in data]
+        for item in self.lotModel.fetch_all():
+            if item.id not in ids:
+                self.lotModel.delete_item(item.id)
         for lot in lots:
             if lot.id == 0:
                 self.lotModel.create(lot)
             else:
                 self.lotModel.update_item(lot.id, name=lot.name)
-            
+        dialog.accept()
+        
     def showDialogNew(self):
         dialog = InitialMaterialDialog(self.view)
         if dialog.exec():
