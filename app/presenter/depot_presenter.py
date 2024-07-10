@@ -78,18 +78,28 @@ class DepotPresenter(BasePresenter):
         material : Material= self.model.fetch_item_by_id(selectedId)
         dialog = MouvementMaterialDialog(material, self.view)
         if dialog.exec():
-            # Current date and time
-            now = datetime.now()
-            today = now.strftime("%d/%m/%Y")
-            count = dialog.count.spinbox.value()
-            moveType = dialog.typeCombox.combox.text()
-            self.moveModel.create(Mouvement(
-                material_id=selectedId, 
-                type=moveType,
-                date=today,
-                count=count))
-            updatedCount = material.count + count
-            if moveType == "Sortie" :
-                updatedCount = material.count - count
-            self.model.update_item(selectedId, count=str(updatedCount))
-            self.view.parent.nParent.refresh.emit()
+            inGood = dialog.countInGood.spinbox.value()
+            nInGood = str(int(material.in_good) + inGood)
+            inStore = dialog.inStoreSpinBox.lineEdit.text()
+            be = dialog.beSpinBox.lineEdit.text()
+            breakdown = dialog.breakdownSpinBox.lineEdit.text()
+            
+            mouvement = Mouvement(
+                material_id = material.id,
+                in_good     = inGood,
+                grade       = dialog.gradeEdit.text(),
+                full_name   = dialog.fullNameEdit.text(),
+                contact     = dialog.contactEdit.text(),
+                motif       = dialog.motifEdit.text(),
+                place       = dialog.placeEdit.text(),
+                date_perc   = dialog.datePercEdit.text(),
+                #date_reinteg= dialog.dateReintegEdit.text()
+            )
+            self.moveModel.create(mouvement)
+            self.model.update_item(material.id, 
+                                   in_good  = nInGood,
+                                   in_store = inStore,
+                                   be       = be,
+                                   breakdown= breakdown
+                                )
+            self.view.parent.depot.emit()

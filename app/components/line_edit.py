@@ -17,6 +17,10 @@ class LineEditWithLabel(QVBoxLayout):
 
     def setText(self, text:str):
         self.lineEdit.setText(text)
+    
+    def setWidth(self, width:int):
+        self.label.setFixedWidth(width)
+        self.lineEdit.setFixedWidth(width)
 
 class DateEditWithLabel(QVBoxLayout):
     def __init__(self, label:str, parent=None):
