@@ -28,9 +28,9 @@ class MaterialsInterface(QWidget):
         self.outInterface = OutTab(self)
 
         # add items to pivot
-        self.addSubInterface(self.depotInterface, 'depotInterface', 'Matériels au dépot')
-        self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
+        self.addSubInterface(self.depotInterface, 'depotInterface', 'Matériels en magasin')
         self.addSubInterface(self.outInterface, 'outInterface', 'Matériels sortis')
+        self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
 
         self.__initCommandBar()
         self.vBoxLayout.addWidget(self.stackedWidget)
@@ -82,7 +82,7 @@ class MaterialsInterface(QWidget):
         self.commandBar.addSeparator()
         self.commandBar.addAction(self.deleteAction)
         
-        self.titleLabel = StrongBodyLabel("Matériels au dépot")
+        self.titleLabel = StrongBodyLabel("Matériels en magasin")
         
         self.searchLineEdit = SearchLineEdit(self)
         self.searchLineEdit.setPlaceholderText("Recherche")
