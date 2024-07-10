@@ -1,5 +1,6 @@
 from datetime import datetime
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtGui import QCursor
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
 from .base_presenter import BasePresenter
@@ -17,17 +18,44 @@ class DepotPresenter(BasePresenter):
         self.view.parent.refresh.connect(lambda: self.fetchData(self.model.fetch_all()))
         
     def fetchData(self, data):
-        nData = self.model.fetch_all()
-        return super().fetchData(nData)
+        gData = self.model.fetch_all(group="lot_name")
+        bData = []
+        for nItem in gData:
+            bData.append(Material(lot_name=nItem.lot_name))
+            bData.extend(self.model.fetch_all(lot_name=nItem.lot_name))
+        return super().fetchData(bData)
         
     def handleResult(self, data: list[Material]):
         super().handleResult(data)
-        listData = []
-        for material in data:
-            listData.append(
-                [material.id, material.name, material.into_account, material.in_good, 
-                 material.in_store, material.be, material.breakdown, material.date_reinteg] )
-        self.view.tableView.setData(listData)
+        table = self.view.tableView
+        table.setRowCount(len(data))
+        rows = []
+        nRows = []
+        for row, material in enumerate(data):
+            nRows.append(row)
+            if material.id > 0:
+                table.setItem(row, 0, QTableWidgetItem(str(material.id)))
+                table.setItem(row, 1, QTableWidgetItem(str(material.name)))
+                table.setItem(row, 2, QTableWidgetItem(str(material.into_account)))
+                table.setItem(row, 3, QTableWidgetItem(str(material.in_good)))
+                table.setItem(row, 4, QTableWidgetItem(str(material.in_store)))
+                table.setItem(row, 5, QTableWidgetItem(str(material.be)))
+                table.setItem(row, 6, QTableWidgetItem(str(material.breakdown)))
+                table.setItem(row, 7, QTableWidgetItem(str(material.date_reinteg)))
+            else:
+                item = QTableWidgetItem(f'LOT: {material.lot_name}')
+                item.setTextAlignment(Qt.AlignCenter)
+                table.setItem(row, 0, item)
+                rows.append(row)
+        table.resizeColumnsToContents()
+        for row in nRows:
+            if row in rows:
+                table.setSpan(row, 0, 1, 8)
+            else:
+                current_row_span = table.rowSpan(row, 0)
+                current_col_span = table.columnSpan(row, 0)
+                if current_row_span > 1 or current_col_span > 1:
+                    table.setSpan(row, 0, 1, 1)  # Restoring to original span (1x1)
     
     def mouseRightClick(self, event):
         selectedItems = self.view.tableView.selectedItems()
@@ -55,7 +83,6 @@ class DepotPresenter(BasePresenter):
             today = now.strftime("%d/%m/%Y")
             count = dialog.count.spinbox.value()
             moveType = dialog.typeCombox.combox.text()
-            
             self.moveModel.create(Mouvement(
                 material_id=selectedId, 
                 type=moveType,

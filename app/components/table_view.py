@@ -27,7 +27,7 @@ class TableView(QTableWidget):
     
     def setHorizontalHeaderLabels(self, labels: Iterable[str | None]) -> None:
         self.setColumnCount(len(labels))
-        self.header.setSectionResizeMode(len(labels) - 1, QHeaderView.Stretch)
+        #self.header.setSectionResizeMode(len(labels) - 1, QHeaderView.Stretch)
         return super().setHorizontalHeaderLabels(labels)
         
     def setData(self, items):

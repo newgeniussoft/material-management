@@ -5,6 +5,7 @@ from dataclasses import dataclass
 @dataclass
 class Material(Entity):
     id: int = 0
+    lot_name: str  = ""
     name: str = ""
     into_account: int = 0
     in_good: int = 0

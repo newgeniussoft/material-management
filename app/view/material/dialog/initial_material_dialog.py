@@ -23,12 +23,17 @@ class InitialMaterialDialog(Dialog):
         self.dateReintegEdit = DateEditWithLabel("DATE")
         self.dateReintegEdit.setDateNow()
         self.nameEdit = LineEditWithLabel("DESIGNATION")
+        self.lot = ComboxEditWithLabel('LOT', ['-', 'Nautique'])
         self.row.addLayout(self.dateReintegEdit)
         self.row.addLayout(self.nameEdit)
+        self.row.addLayout(self.lot)
         
         self.intoAccountSpinBox = SpinBoxEditWithLabel("EN COMPTE")
+        self.intoAccountSpinBox.spinbox.textChanged.connect(self.__setBeValue)
         self.beSpinBox = SpinBoxEditWithLabel("BE")
+        self.beSpinBox.spinbox.textChanged.connect(self.__setBreakdownValue)
         self.breakdownSpinBox = SpinBoxEditWithLabel("PANNE")
+        self.breakdownSpinBox.spinbox.textChanged.connect(self.__setBeValue)
         self.row_2 = QHBoxLayout()
         self.row_2.addLayout(self.intoAccountSpinBox)
         self.row_2.addLayout(self.beSpinBox)
@@ -46,6 +51,16 @@ class InitialMaterialDialog(Dialog):
         self.textLayout.addLayout(self.row_2)
         self.textLayout.addLayout(self.row_3)
         self.setFixedWidth(600)
+    
+    def __setBeValue(self, value):
+        nValue = self.intoAccountSpinBox.spinbox.value()
+        breakdown = self.breakdownSpinBox.spinbox.value()
+        self.beSpinBox.spinbox.setValue(int(nValue) - int(breakdown))
+    
+    def __setBreakdownValue(self, value):
+        nValue = self.intoAccountSpinBox.spinbox.value()
+        be = self.beSpinBox.spinbox.value()
+        self.breakdownSpinBox.spinbox.setValue(int(nValue) - int(be))
     
     def addAccessory(self):
         labelEdit = self.accessoryEdit.lineEdit

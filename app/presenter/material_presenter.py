@@ -44,6 +44,10 @@ class MaterialPresenter:
         
     def showDialogNew(self):
         dialog = InitialMaterialDialog(self.view)
+        dialog.lot.combox.clear()
+        dialog.lot.combox.addItem('-')
+        for lot in self.lotModel.fetch_all():
+            dialog.lot.combox.addItem(lot.name)
         if dialog.exec():
             name = dialog.nameEdit.lineEdit.text()
             intoAccount = dialog.intoAccountSpinBox.spinbox.value()
@@ -53,15 +57,18 @@ class MaterialPresenter:
             fullName = dialog.fullNameEdit.lineEdit.text()
             contact = dialog.contactEdit.lineEdit.text()
             dateReinteg = dialog.dateReintegEdit.lineEdit.text()
+            lot = dialog.lot.combox.currentText()
             material = Material(
                 name         = name,
+                lot_name     = lot,
                 into_account = intoAccount,
                 be           = be,
                 breakdown    = breakdown,
+                in_store     = intoAccount,
                 grade        = grade,
                 full_name    = fullName,
                 contact      = contact,
-                date_reinteg = dateReinteg
+                date_reinteg = dateReinteg,
             )
             self.model.create(material)
             self.view.depot.emit()
