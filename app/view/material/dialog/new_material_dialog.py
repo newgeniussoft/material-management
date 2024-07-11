@@ -50,68 +50,12 @@ class NewMaterialDialog(Dialog):
         self.row_4.addLayout(self.dateReintegEdit)
         self.row_4.addLayout(self.stateMatIntegr)
         
-        '''
-        self.dateEdit = DateEditWithLabel("Date")
-        self.nameEdit = LineEditWithLabel("Designation")
-        self.nameEdit.lineEdit.textChanged.connect(self.__isValid)
-        self.typeEdit = LineEditWithLabel("Types")
-        self.typeEdit.lineEdit.textChanged.connect(self.__isValid)
-        self.row.addLayout(self.dateEdit)
-        self.row.addLayout(self.nameEdit)
-        self.row.addLayout(self.typeEdit)
-        
-        self.row_2 = QHBoxLayout()
-        self.brandEdit = LineEditWithLabel("Marque")
-        self.modelEdit = LineEditWithLabel("Model")
-        
-        self.countSpinBox = SpinBoxEditWithLabel("Nombre")
-        self.countSpinBox.spinbox.textChanged.connect(self.__isValid)
-        self.row_2.addLayout(self.brandEdit)
-        self.row_2.addLayout(self.modelEdit)
-        self.row_2.addLayout(self.countSpinBox)
-        
-        self.accTitle = StrongBodyLabel("Accessoires")
-        self.accTable = TableView(parent)
-        self.accTable.contextMenuEvent = lambda event: self.mouseRightClick(event)
-        self.accTable.setHorizontalHeaderLabels(['Nombres', 'Rubriques'])
-        self.accTable.setMinimumHeight(150)
-        
-        self.row_3 = QHBoxLayout()
-        self.accCountSpinBox = SpinBoxEditWithLabel("Nombre")
-        self.accCountSpinBox.spinbox.textChanged.connect(self.__isAccValid)
-        self.accessoryEdit = LineEditWithLabel("Rubrique accessoire")
-        self.accessoryEdit.lineEdit.textChanged.connect(self.__isAccValid)
-        self.btnAddAccessory = PrimaryPushButton(FluentIcon.ACCEPT, 'Ajouter', parent)
-        self.btnAddAccessory.setEnabled(False)
-        self.btnAddAccessory.clicked.connect(lambda: self.addAccessory())
-        self.row_3.addLayout(self.accCountSpinBox)
-        self.row_3.addLayout(self.accessoryEdit)
-        self.row_3.addWidget(self.btnAddAccessory, alignment=Qt.AlignBottom)
-        
-        self.row_4 = QHBoxLayout()
-        self.stateEdit = LineEditWithLabel("Etat")
-        self.fonctionalityEdit = LineEditWithLabel("Fonctionnalité")
-        self.row_4.addLayout(self.stateEdit)
-        self.row_4.addLayout(self.fonctionalityEdit)
-        
-        self.row_5 = QHBoxLayout()
-        self.motifEdit = LineEditWithLabel("Motif")
-        self.observationEdit = LineEditWithLabel("Observation")
-        self.row_5.addLayout(self.motifEdit)
-        self.row_5.addLayout(self.observationEdit)'''
-        
         # add widget to view layout
         self.textLayout.addWidget(self.titleLabel)
         self.textLayout.addLayout(self.row)
         self.textLayout.addLayout(self.row_2)
         self.textLayout.addLayout(self.row_3)
         self.textLayout.addLayout(self.row_4)
-        '''
-        self.textLayout.addLayout(self.row_4)
-        self.textLayout.addLayout(self.row_5)
-        self.textLayout.addWidget(self.accTitle, Qt.AlignCenter)
-        self.textLayout.addLayout(self.row_3)
-        self.textLayout.addWidget(self.accTable)'''
         self.setFixedWidth(600)
     
     def addAccessory(self):

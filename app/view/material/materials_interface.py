@@ -67,20 +67,13 @@ class MaterialsInterface(QWidget):
         setFont(self.commandBar, 14)
         
         self.addAction = Action(FluentIcon.APPLICATION, "Nouveau matériel", self)
-        self.addLot = Action(FluentIcon.FOLDER, "Lot", self)
-        self.importAction = Action(FluentIcon.DOWNLOAD, "Importer", self)
-        self.exportActionCsv = Action(FluentIcon.QUICK_NOTE, "CSV", self)
-        self.exportAction = Action(FluentIcon.DOCUMENT, "Excel", self)
-        self.dropDownButtonExp = self.createDropDownButton('Exporter', 
-                                                        FluentIcon.SHARE,[self.exportAction, self.exportActionCsv], self)
+        self.addLot = Action(FluentIcon.FOLDER, "LOT", self)
+        self.exportAction = Action(FluentIcon.SHARE, "Exporter", self)
         self.deleteAction = Action(FluentIcon.DELETE, "Supprimer tous", self)   
         
         self.commandBar.addAction(self.addAction)
         self.commandBar.addAction(self.addLot)
-        self.commandBar.addAction(self.importAction)
-        self.commandBar.addWidget(self.dropDownButtonExp)
-        self.commandBar.addSeparator()
-        self.commandBar.addAction(self.deleteAction)
+        self.commandBar.addAction(self.exportAction)
         
         self.titleLabel = StrongBodyLabel("Matériels en magasin")
         

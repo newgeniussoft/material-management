@@ -16,16 +16,16 @@ class LotDialog(Dialog):
         self.contentLabel.setVisible(False)
         self.rowEdit = None
         self.row = QHBoxLayout()
-        self.btnGroup = QHBoxLayout()
+        #self.btnGroup = QHBoxLayout()
         self.title = SubtitleLabel("Lot")
-        
-        self.btnImport = ToolButton(FluentIcon.DOWNLOAD)
-        self.btnExport= ToolButton(FluentIcon.SHARE)
         self.row.addWidget(self.title, 0, Qt.AlignLeft)
-        self.btnGroup.addWidget(self.btnImport)
+        
+        '''self.btnImport = ToolButton(FluentIcon.DOWNLOAD)
+        self.btnExport= ToolButton(FluentIcon.SHARE)'''
+        '''self.btnGroup.addWidget(self.btnImport)
         self.btnGroup.addWidget(self.btnExport)
         self.btnGroup.setAlignment(Qt.AlignRight)
-        self.row.addLayout(self.btnGroup)
+        self.row.addLayout(self.btnGroup)'''
         
         self.row_2 = QHBoxLayout()
         self.name = LineEditWithLabel("Nouveau lot")
