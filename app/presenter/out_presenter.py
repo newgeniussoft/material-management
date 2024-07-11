@@ -1,5 +1,6 @@
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QColor
 from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtWidgets import QTableWidgetItem
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
 from ..models import MaterialModel, Mouvement, MouvementModel, Material
 from .base_presenter import BasePresenter
@@ -13,7 +14,7 @@ class OutPresenter(BasePresenter):
         super().__init__([], parent)
         self.view: OutTab = parent.view.outInterface
         self.refresh.connect(lambda: self.fetchData([]))
-        self.setTableHeaderLabels(["ID", "DESIGNATION DE MATERIEL", "EN BON", "GRADE", "NOM ET PRENOM", "CONTACT", "MOTIF", "LIEU", "DATE DE PERCEPTION"])
+        self.setTableHeaderLabels(["ID", "DESIGNATION DE MATERIEL", "EN BON", "GRADE", "NOM ET PRENOM", "CONTACT", "MOTIF", "LIEU", "DATE DE PERCEPTION", "DATE DE REINTEGRATION"])
         self.setTableContextMenu(self.mouseRightClick)
         
     def fetchData(self, data):
@@ -21,12 +22,31 @@ class OutPresenter(BasePresenter):
             ['mouvements.id', 'materials.name', 'mouvements.in_good',
              'mouvements.grade','mouvements.full_name',
              'mouvements.contact', 'mouvements.motif', 
-             'mouvements.place', 'mouvements.date_perc'], 'materials', 'material_id')
+             'mouvements.place', 'mouvements.date_perc', 'mouvements.date_reinteg'], 'materials', 'material_id', order='materials.name')
         return super().fetchData(nData)
         
     def handleResult(self, data: list):
+        vItems = []
+        rows = []
         self.view.progressBar.setVisible(False)
-        self.view.tableView.setData([list(item) for item in data])
+        nData = [list(item) for item in data]
+        self.view.tableView.setRowCount(len(nData))
+        for i, item in enumerate(nData):
+            for j, nItem in enumerate(item):
+                if j == 1:
+                    if nItem not in vItems:
+                        vItems.append(nItem)
+                        rows.append(i)
+                self.view.tableView.setItem(i,j,QTableWidgetItem(str(nItem)))
+                if nItem == "" and j == len(item) - 1:
+                    for k in range(0,j):
+                        self.view.tableView.item(i,k).setForeground(QColor('red'))
+        rows.append(len(nData))
+        differences = [rows[i] - rows[i-1] for i in range(1, len(rows))]
+        for i, row in enumerate(rows):
+            if i < len(differences) and differences[i] > 1:
+                self.view.tableView.setSpan(row, 1, differences[i], 1)
+        self.view.tableView.resizeColumnsToContents()
         
     
     def mouseRightClick(self, event):
@@ -48,4 +68,17 @@ class OutPresenter(BasePresenter):
         dialog.countInGood.spinbox.setValue(move.in_good)
         dialog.countInGood.spinbox.setMaximum(move.in_good)
         if dialog.exec():
-            pass
+            inGood = dialog.countInGood.spinbox.value()
+            nInGood = str(int(material.in_good) - inGood)
+            inStore = dialog.inStoreSpinBox.lineEdit.text()
+            be = dialog.beSpinBox.lineEdit.text()
+            breakdown = dialog.breakdownSpinBox.lineEdit.text()
+            dateReinteg =  dialog.dateReintegEdit.text()
+            self.moveModel.update_item(idItem, in_good=nInGood, date_reinteg=dateReinteg)
+            self.model.update_item(material.id, 
+                                   in_good  = nInGood,
+                                   in_store = inStore,
+                                   be       = be,
+                                   breakdown= breakdown
+                                )
+            self.view.parent.depot.emit()

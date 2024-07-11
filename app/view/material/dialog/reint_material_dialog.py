@@ -63,12 +63,12 @@ class ReintMaterialDialog(Dialog):
         self.row_3 = QHBoxLayout()
         self.countInGood = SpinBoxEditWithLabel('Nombre')
         self.countInGood.spinbox.textChanged.connect(self.__inGoodChanged)
-        self.datePercEdit = DateEditWithLabel("DATE DE REINTEGRATION")
-        self.datePercEdit.setDateNow()
+        self.dateReintegEdit = DateEditWithLabel("DATE DE REINTEGRATION")
+        self.dateReintegEdit.setDateNow()
         self.stateMatIntegr = ComboxEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION", ['BONNE ETAT', 'EN PANNE'])
         self.stateMatIntegr.combox.currentTextChanged.connect(self.__inGoodChanged)
         self.row_3.addLayout(self.countInGood)
-        self.row_3.addLayout(self.datePercEdit)
+        self.row_3.addLayout(self.dateReintegEdit)
         self.row_3.addLayout(self.stateMatIntegr)
 
         # add widget to view layout

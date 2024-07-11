@@ -185,11 +185,15 @@ class Model:
         cursor.execute(sql)
         return cursor.fetchall()
         
-    def select_join(self, columns, toTable, column):
+    def select_join(self, columns, toTable, column, **kwargs):
         sql = f"SELECT "
         sql += ', '.join([f'{col}' for col in columns])
         sql += f" FROM {self.TABLE} "
         sql += f" LEFT JOIN {toTable} ON {toTable}.id = {self.TABLE}.{column}"
+        if len(kwargs) != 0:
+            keys = kwargs.keys()
+            if 'order' in keys:
+                sql += f" ORDER BY {kwargs.get('order')} ASC"
         cursor = self.conn.cursor()
         cursor.execute(sql)
         return cursor.fetchall()
