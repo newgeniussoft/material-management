@@ -12,6 +12,10 @@ class LineEditWithLabel(QVBoxLayout):
         self.addWidget(self.label)
         self.addWidget(self.lineEdit)
         
+    def setVisible(self, visible:bool):
+        self.lineEdit.setVisible(visible)
+        self.label.setVisible(visible)
+        
     def text(self) -> str:
         return self.lineEdit.text()
 

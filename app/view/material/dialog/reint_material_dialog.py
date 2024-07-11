@@ -25,6 +25,7 @@ class ReintMaterialDialog(Dialog):
         self.intoAccountSpinBox = LineEditWithLabel("EN COMPTE")
         self.intoAccountSpinBox.lineEdit.setReadOnly(True)
         self.intoAccountSpinBox.setWidth(80)
+        self.intoAccountSpinBox.setVisible(False)
         
         self.inStoreSpinBox = LineEditWithLabel("EN MAGASIN")
         self.inStoreSpinBox.setWidth(90)
@@ -33,10 +34,12 @@ class ReintMaterialDialog(Dialog):
         self.beSpinBox = LineEditWithLabel("BE")
         self.beSpinBox.setWidth(50)
         self.beSpinBox.lineEdit.setReadOnly(True)
+        self.beSpinBox.setVisible(False)
         
         self.breakdownSpinBox = LineEditWithLabel("PANNE")
         self.breakdownSpinBox.setWidth(80)
         self.breakdownSpinBox.lineEdit.setReadOnly(True)
+        self.breakdownSpinBox.setVisible(False)
         
         self.row.addLayout(self.nameEdit)
         self.row.addLayout(self.intoAccountSpinBox)
