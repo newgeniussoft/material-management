@@ -34,14 +34,9 @@ class DepotPresenter(BasePresenter):
         for row, material in enumerate(data):
             nRows.append(row)
             if material.id > 0:
-                table.setItem(row, 0, QTableWidgetItem(str(material.id)))
-                table.setItem(row, 1, QTableWidgetItem(str(material.name)))
-                table.setItem(row, 2, QTableWidgetItem(str(material.into_account)))
-                table.setItem(row, 3, QTableWidgetItem(str(material.in_good)))
-                table.setItem(row, 4, QTableWidgetItem(str(material.in_store)))
-                table.setItem(row, 5, QTableWidgetItem(str(material.be)))
-                table.setItem(row, 6, QTableWidgetItem(str(material.breakdown)))
-                table.setItem(row, 7, QTableWidgetItem(str(material.date_reinteg)))
+                keys = ['id', 'name','into_account', 'in_good', 'in_store', 'be', 'breakdown', 'date_reinteg']
+                for i,  key in enumerate(keys):
+                    table.setItem(row, i, QTableWidgetItem(str(material.get(key))))
             else:
                 item = QTableWidgetItem(f'LOT: {material.lot_name}')
                 item.setTextAlignment(Qt.AlignCenter)

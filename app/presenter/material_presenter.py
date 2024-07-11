@@ -13,7 +13,6 @@ class MaterialPresenter:
         self.lotModel = LotModel()
         self.__actions()
         self.depotPresenter = DepotPresenter(self)
-        self.inPresenter = InPresenter(self)
         self.outPresenter = OutPresenter(self)
         
     def __actions(self):

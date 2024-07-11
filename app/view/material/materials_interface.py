@@ -29,8 +29,8 @@ class MaterialsInterface(QWidget):
 
         # add items to pivot
         self.addSubInterface(self.depotInterface, 'depotInterface', 'Matériels en magasin')
-        self.addSubInterface(self.outInterface, 'outInterface', 'Matériels sortis')
-        self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
+        self.addSubInterface(self.outInterface, 'outInterface', 'Mouvements du Matériel')
+        #self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
 
         self.__initCommandBar()
         self.vBoxLayout.addWidget(self.stackedWidget)

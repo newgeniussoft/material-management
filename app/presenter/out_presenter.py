@@ -73,21 +73,10 @@ class OutPresenter(BasePresenter):
                 if item != None:
                     vl = item.text()
                     if vl.find('LOT') != -1:
-                        self.view.tableView.setSpan(row, 1, differences[i]-1, 1)
-                        self.view.tableView.setSpan(row, 2, differences[i]-1, 1)
-                        self.view.tableView.setSpan(row, 3, differences[i]-1, 1)
-                        self.view.tableView.setSpan(row, 4, differences[i]-1, 1)
-                        self.view.tableView.setSpan(row, 5, differences[i]-1, 1)
-                        self.view.tableView.setSpan(row, 6, differences[i]-1, 1)
+                        self.setRowSpan(row,differences[i]-1, 1,6)
                     else:
-                        self.view.tableView.setSpan(row, 1, differences[i], 1)
-                        self.view.tableView.setSpan(row, 2, differences[i], 1)
-                        self.view.tableView.setSpan(row, 3, differences[i], 1)
-                        self.view.tableView.setSpan(row, 4, differences[i], 1)
-                        self.view.tableView.setSpan(row, 5, differences[i], 1)
-                        self.view.tableView.setSpan(row, 6, differences[i], 1)
-                        
-                #print(differences[i])
+                        self.setRowSpan(row,differences[i], 1,6)
+                
         self.view.tableView.resizeColumnsToContents()
         for row in nRows:
             if row in bRows:
@@ -97,7 +86,9 @@ class OutPresenter(BasePresenter):
                 current_col_span = self.view.tableView.columnSpan(row, 0)
                 if current_row_span > 1 or current_col_span > 1:
                     self.view.tableView.setSpan(row, 0, 1, 1)  # Restoring to original span (1x1)
-        
+    def setRowSpan(self, row, rowSpan, start, end):
+        for i in range(start, end):
+            self.view.tableView.setSpan(row, i, rowSpan, 1)
     
     def mouseRightClick(self, event):
         
