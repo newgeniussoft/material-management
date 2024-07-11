@@ -23,6 +23,7 @@ class InitialMaterialDialog(Dialog):
         self.dateReintegEdit = DateEditWithLabel("DATE")
         self.dateReintegEdit.setDateNow()
         self.nameEdit = LineEditWithLabel("DESIGNATION")
+        self.nameEdit.lineEdit.textChanged.connect(self.__isValid)
         self.lot = ComboxEditWithLabel('LOT', ['-', 'Nautique'])
         self.row.addLayout(self.dateReintegEdit)
         self.row.addLayout(self.nameEdit)
@@ -51,8 +52,10 @@ class InitialMaterialDialog(Dialog):
         self.textLayout.addLayout(self.row_2)
         self.textLayout.addLayout(self.row_3)
         self.setFixedWidth(600)
+        self.yesButton.setEnabled(False)
     
     def __setBeValue(self, value):
+        self.__isValid()
         nValue = self.intoAccountSpinBox.spinbox.value()
         breakdown = self.breakdownSpinBox.spinbox.value()
         self.beSpinBox.spinbox.setValue(int(nValue) - int(breakdown))
@@ -92,8 +95,11 @@ class InitialMaterialDialog(Dialog):
         else:
             self.btnAddAccessory.setEnabled(False)
             
-    def __isValid(self, text):
-        name = self.nameEdit.lineEdit.text()
-        nType = self.typeEdit.lineEdit.text()
-        count = self.countSpinBox.spinbox.value()
-        self.yesButton.setEnabled(len(name) > 2 and len(nType) > 2 and count > 0)
+    def __isValid(self, text = None):
+        intoAccount = self.intoAccountSpinBox.spinbox.value()
+        isValid = True
+        if intoAccount == 0:
+            isValid = False
+        if len(self.nameEdit.text()) < 3:
+            isValid = False
+        self.yesButton.setEnabled(isValid)

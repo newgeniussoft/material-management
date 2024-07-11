@@ -1,26 +1,29 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 
-class GridView(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
+# Create a new Workbook
+wb = Workbook()
+ws = wb.active
 
-    def initUI(self):
-        grid = QGridLayout()
-        self.setLayout(grid)
+# Data to merge
+merge_data = [
+    (1, 1),  # Merge cells from row 1, column 1
+    (3, 1),  # Merge cells from row 2, column 1
+]
 
-        # Creating buttons in a 3x3 grid
-        positions = [(i, j) for i in range(3) for j in range(3)]
-        for pos in positions:
-            button = QPushButton(f'Button {pos[0]},{pos[1]}', self)
-            grid.addWidget(button, *pos)
+    
+def merge(merge_data):
+    # Perform merging
+    for row, col in merge_data:
+        start_cell = ws.cell(row=row, column=col)
+        end_cell = ws.cell(row=row, column=col+1)  # Assuming merging 2 cells horizontally
+        ws.merge_cells(start_cell.coordinate + ':' + end_cell.coordinate)
+    
+merge(merge_data)
+# Assigning values to merged cells
+ws.cell(row=1, column=1, value='Merged Cells 1')
+ws.cell(row=2, column=1, value='Merged Cells 2')
+ws.cell(row=3, column=1, value='Merged Cells 3')
 
-        self.setGeometry(100, 100, 300, 300)
-        self.setWindowTitle('Grid View Example')
-        self.show()
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    grid_view = GridView()
-    sys.exit(app.exec_())
+# Save the file
+wb.save('example.xlsx')
