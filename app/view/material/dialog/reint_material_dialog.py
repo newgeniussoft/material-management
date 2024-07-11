@@ -86,9 +86,6 @@ class ReintMaterialDialog(Dialog):
         self.inStoreSpinBox.lineEdit.setText(str(material.in_store))
         self.beSpinBox.lineEdit.setText(str(material.be))
         self.breakdownSpinBox.lineEdit.setText(str(material.breakdown))
-        self.gradeEdit.setText(str(material.grade))
-        self.fullNameEdit.setText(str(material.full_name))
-        self.contactEdit.setText(str(material.contact))
         
     def __inGoodChanged(self, value):
         inGood = self.countInGood.spinbox.value()

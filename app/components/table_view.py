@@ -16,6 +16,12 @@ class TableView(QTableWidget):
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setContentsMargins(0,0,0,0)
         self.setQss(cfg.get(cfg.theme))
+        
+    def setColorRow(self, row:int, color:str):
+        for col in range(len(self.getHeaderLabels())):
+            item = self.item(row,col)
+            if item != None:
+                item.setForeground(QColor(color))
     
     def setQss(self, newTheme: str):
         theme = newTheme.lower()
@@ -29,6 +35,16 @@ class TableView(QTableWidget):
         self.setColumnCount(len(labels))
         #self.header.setSectionResizeMode(len(labels) - 1, QHeaderView.Stretch)
         return super().setHorizontalHeaderLabels(labels)
+    
+    def getHeaderLabels(self):
+        header_labels = []
+        for column in range(self.columnCount()):
+            header_item = self.horizontalHeaderItem(column)
+            if header_item is not None:
+                header_labels.append(header_item.text())
+            else:
+                header_labels.append(f"Column {column}")  # Default label if item is None
+        return header_labels
         
     def setData(self, items):
         self.setRowCount(0)
