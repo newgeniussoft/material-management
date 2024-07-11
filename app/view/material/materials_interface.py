@@ -24,13 +24,11 @@ class MaterialsInterface(QWidget):
         self.hBoxLayout = QHBoxLayout()
 
         self.depotInterface = DepotTab(self)
-        self.entryInterface = EntryTab(self)
         self.outInterface = OutTab(self)
 
         # add items to pivot
         self.addSubInterface(self.depotInterface, 'depotInterface', 'Matériels en magasin')
         self.addSubInterface(self.outInterface, 'outInterface', 'Mouvements du Matériel')
-        #self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
 
         self.__initCommandBar()
         self.vBoxLayout.addWidget(self.stackedWidget)
