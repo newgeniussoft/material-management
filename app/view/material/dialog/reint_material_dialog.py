@@ -6,14 +6,14 @@ from qfluentwidgets import Dialog, SubtitleLabel, StrongBodyLabel, PrimaryPushBu
 from ....components import LineEditWithLabel, DateEditWithLabel, SpinBoxEditWithLabel, TableView, ComboxEditWithLabel
 from ....models import Material
 
-class MouvementMaterialDialog(Dialog):
+class ReintMaterialDialog(Dialog):
 
     def __init__(self, material:Material, parent=None):
         super().__init__("Ajouter un nouveau matériel", "", parent)
         self.setTitleBarVisible(False)
         self.titleLabel.setVisible(False)
         self.contentLabel.setVisible(False)
-        self.titleLabel = StrongBodyLabel(f'PERCEPTION | {material.name}')
+        self.titleLabel = StrongBodyLabel(f'REINTEGRATION | {material.name}')
         self.accessory = []
         self.parent = parent
         self.material = material
@@ -25,6 +25,7 @@ class MouvementMaterialDialog(Dialog):
         self.intoAccountSpinBox = LineEditWithLabel("EN COMPTE")
         self.intoAccountSpinBox.lineEdit.setReadOnly(True)
         self.intoAccountSpinBox.setWidth(80)
+        self.intoAccountSpinBox.setVisible(False)
         
         self.inStoreSpinBox = LineEditWithLabel("EN MAGASIN")
         self.inStoreSpinBox.setWidth(90)
@@ -33,10 +34,12 @@ class MouvementMaterialDialog(Dialog):
         self.beSpinBox = LineEditWithLabel("BE")
         self.beSpinBox.setWidth(50)
         self.beSpinBox.lineEdit.setReadOnly(True)
+        self.beSpinBox.setVisible(False)
         
         self.breakdownSpinBox = LineEditWithLabel("PANNE")
         self.breakdownSpinBox.setWidth(80)
         self.breakdownSpinBox.lineEdit.setReadOnly(True)
+        self.breakdownSpinBox.setVisible(False)
         
         self.row.addLayout(self.nameEdit)
         self.row.addLayout(self.intoAccountSpinBox)
@@ -50,34 +53,33 @@ class MouvementMaterialDialog(Dialog):
         self.line.setObjectName("line")
         
         self.row_2 = QHBoxLayout()
-        self.countInGood = SpinBoxEditWithLabel('Nombre en bon')
-        self.countInGood.spinbox.textChanged.connect(self.__inGoodChanged)
-        self.datePercEdit = DateEditWithLabel("DATE DE PERCEPTION")
-        self.datePercEdit.setDateNow()
-        
-        self.row_2.addLayout(self.countInGood)
-        self.row_2.addLayout(self.datePercEdit)
-    
-        self.row_3 = QHBoxLayout()
         self.gradeEdit = LineEditWithLabel("GRADE")
         self.fullNameEdit = LineEditWithLabel("NOM ET PRENOMS")
         self.contactEdit = LineEditWithLabel("CONTACT")
-        self.row_3.addLayout(self.gradeEdit)
-        self.row_3.addLayout(self.fullNameEdit)
-        self.row_3.addLayout(self.contactEdit)
-        self.row_4 = QHBoxLayout()
-        self.motifEdit = LineEditWithLabel("MOTIF")
-        self.placeEdit = LineEditWithLabel("LIEU")
-        self.row_4.addLayout(self.motifEdit)
-        self.row_4.addLayout(self.placeEdit)
+        self.gradeEdit.lineEdit.setReadOnly(True)
+        self.fullNameEdit.lineEdit.setReadOnly(True)
+        self.contactEdit.lineEdit.setReadOnly(True)
+        self.row_2.addLayout(self.gradeEdit)
+        self.row_2.addLayout(self.fullNameEdit)
+        self.row_2.addLayout(self.contactEdit)
+        
+        self.row_3 = QHBoxLayout()
+        self.countInGood = SpinBoxEditWithLabel('Nombre')
+        self.countInGood.spinbox.textChanged.connect(self.__inGoodChanged)
+        self.dateReintegEdit = DateEditWithLabel("DATE DE REINTEGRATION")
+        self.dateReintegEdit.setDateNow()
+        self.stateMatIntegr = ComboxEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION", ['BONNE ETAT', 'EN PANNE'])
+        self.stateMatIntegr.combox.currentTextChanged.connect(self.__inGoodChanged)
+        self.row_3.addLayout(self.countInGood)
+        self.row_3.addLayout(self.dateReintegEdit)
+        self.row_3.addLayout(self.stateMatIntegr)
 
         # add widget to view layout
         self.textLayout.addWidget(self.titleLabel)
         self.textLayout.addLayout(self.row)
-        self.textLayout.addWidget(self.line)
         self.textLayout.addLayout(self.row_2)
+        self.textLayout.addWidget(self.line)
         self.textLayout.addLayout(self.row_3)
-        self.textLayout.addLayout(self.row_4)
         self.setFixedWidth(600)
         self.__setData(material)
         
@@ -90,9 +92,14 @@ class MouvementMaterialDialog(Dialog):
         
     def __inGoodChanged(self, value):
         inGood = self.countInGood.spinbox.value()
-        self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) - int(inGood)))
-        self.breakdownSpinBox.lineEdit.setText(str(self.material.breakdown))
-        self.beSpinBox.lineEdit.setText(str(int(self.material.be) - int(inGood)))
+        state = self.stateMatIntegr.combox.currentText()
+        self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) + int(inGood)))
+        if state == 'BONNE ETAT':
+            self.beSpinBox.lineEdit.setText(str(int(self.material.be) + int(inGood)))
+            self.breakdownSpinBox.lineEdit.setText(str(self.material.breakdown))
+        else:
+            self.breakdownSpinBox.lineEdit.setText(str(int(self.material.breakdown) + int(inGood)))
+            self.beSpinBox.lineEdit.setText(str(self.material.be))
             
     def __moveChanged(self, value):
         if value == "PERCEPTION":

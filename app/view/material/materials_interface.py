@@ -28,9 +28,9 @@ class MaterialsInterface(QWidget):
         self.outInterface = OutTab(self)
 
         # add items to pivot
-        self.addSubInterface(self.depotInterface, 'depotInterface', 'Matériels au dépot')
-        self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
-        self.addSubInterface(self.outInterface, 'outInterface', 'Matériels sortis')
+        self.addSubInterface(self.depotInterface, 'depotInterface', 'Matériels en magasin')
+        self.addSubInterface(self.outInterface, 'outInterface', 'Mouvements du Matériel')
+        #self.addSubInterface(self.entryInterface, 'entryInterface', 'Matériels entrants')
 
         self.__initCommandBar()
         self.vBoxLayout.addWidget(self.stackedWidget)
@@ -67,7 +67,7 @@ class MaterialsInterface(QWidget):
         setFont(self.commandBar, 14)
         
         self.addAction = Action(FluentIcon.APPLICATION, "Nouveau matériel", self)
-        
+        self.addLot = Action(FluentIcon.FOLDER, "Lot", self)
         self.importAction = Action(FluentIcon.DOWNLOAD, "Importer", self)
         self.exportActionCsv = Action(FluentIcon.QUICK_NOTE, "CSV", self)
         self.exportAction = Action(FluentIcon.DOCUMENT, "Excel", self)
@@ -76,12 +76,13 @@ class MaterialsInterface(QWidget):
         self.deleteAction = Action(FluentIcon.DELETE, "Supprimer tous", self)   
         
         self.commandBar.addAction(self.addAction)
+        self.commandBar.addAction(self.addLot)
         self.commandBar.addAction(self.importAction)
         self.commandBar.addWidget(self.dropDownButtonExp)
         self.commandBar.addSeparator()
         self.commandBar.addAction(self.deleteAction)
         
-        self.titleLabel = StrongBodyLabel("Base des données")
+        self.titleLabel = StrongBodyLabel("Matériels en magasin")
         
         self.searchLineEdit = SearchLineEdit(self)
         self.searchLineEdit.setPlaceholderText("Recherche")
