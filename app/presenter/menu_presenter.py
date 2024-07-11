@@ -1,4 +1,4 @@
-from ..models import MaterialModel
+from ..models import MaterialModel, MouvementModel
 from qfluentwidgets import MessageDialog
 
 class MenuAction:
@@ -7,6 +7,7 @@ class MenuAction:
         self.presenter = presenter
         self.view = presenter.view
         self.model: MaterialModel= self.presenter.model
+        self.moveModel: MouvementModel= self.presenter.moveModel
         
     def update(self, item):
         print(item)
@@ -18,4 +19,5 @@ class MenuAction:
         
     def delete(self, item):
         self.model.delete_item(item)
+        self.moveModel.delete_by(material_id=item)
         self.presenter.refresh.emit()

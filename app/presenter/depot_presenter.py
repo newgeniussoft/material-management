@@ -12,6 +12,7 @@ class DepotPresenter(BasePresenter):
     
     def __init__(self, parent):
         self.model = parent.model
+        self.moveModel = parent.moveModel
         super().__init__(self.model.fetch_all(),parent)
         self.setTableHeaderLabels(["ID", "DESIGNATION DE MATERIEL", "EN COMPTE", "EN BON", "EN MAGASIN", "BONNE ETAT", "PANNE", "DATE"])
         self.setTableContextMenu(self.mouseRightClick)
@@ -56,18 +57,19 @@ class DepotPresenter(BasePresenter):
         selectedItems = self.view.tableView.selectedItems()
         if (len(selectedItems) != 0):
             idItem = self.view.tableView.selectedItems()[0].text()
-            action = MenuAction(self)
-            menu = RoundMenu(parent=self.view)
-            #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
-            '''menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))'''
-            menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
-            menu.addSeparator()
-            menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
+            if idItem.find('LOT') == -1:
+                action = MenuAction(self)
+                menu = RoundMenu(parent=self.view)
+                #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
+                '''menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))'''
+                menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
+                menu.addSeparator()
+                menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
 
-            self.posCur = QCursor().pos()
-            cur_x = self.posCur.x()
-            cur_y = self.posCur.y()
-            menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
+                self.posCur = QCursor().pos()
+                cur_x = self.posCur.x()
+                cur_y = self.posCur.y()
+                menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
             
     def showDialog(self, selectedId):
         material : Material= self.model.fetch_item_by_id(selectedId)
