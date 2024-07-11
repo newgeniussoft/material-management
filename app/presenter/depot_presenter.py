@@ -61,7 +61,7 @@ class DepotPresenter(BasePresenter):
                 action = MenuAction(self)
                 menu = RoundMenu(parent=self.view)
                 selectedRows = self.view.tableView.selectedRows()
-                if selectedItems[len(selectedItems)-2].text() == "" and len(selectedRows) == 1:
+                if len(selectedRows) == 1:
                     menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
                     menu.addSeparator()
                 menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(self.view.tableView, selectedRows)))
