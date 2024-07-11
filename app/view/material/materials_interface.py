@@ -40,7 +40,7 @@ class MaterialsInterface(QWidget):
         self.countLayout.setContentsMargins(0,0,0,0)
         self.countLayout.setAlignment(Qt.AlignRight)
         self.titleCount = StrongBodyLabel("Nombre")
-        self.valueCount = BodyLabel("1220")
+        self.valueCount = BodyLabel("")
         self.countLayout.addWidget(self.titleCount)
         self.countLayout.addWidget(self.valueCount)        
         self.vBoxLayout.addLayout(self.countLayout)
@@ -77,13 +77,8 @@ class MaterialsInterface(QWidget):
         
         self.titleLabel = StrongBodyLabel("Matériels en magasin")
         
-        self.searchLineEdit = SearchLineEdit(self)
-        self.searchLineEdit.setPlaceholderText("Recherche")
-        self.searchLineEdit.setFixedWidth(200)
-        
         self.hBoxLayout.addWidget(self.commandBar)
         self.hBoxLayout.addWidget(self.titleLabel)
-        self.hBoxLayout.addWidget(self.searchLineEdit)
         self.vBoxLayout.addLayout(self.hBoxLayout)
         
     def addSubInterface(self, widget: QLabel, objectName, text):
