@@ -48,6 +48,7 @@ class OutPresenter(BasePresenter):
         nRows = []
         self.view.progressBar.setVisible(False)
         nData = [list(item) for item in data]
+        self.view.tableView.setRowCount(0)
         self.view.tableView.setRowCount(len(nData))
         for i, item in enumerate(nData):
             nRows.append(i)
@@ -74,9 +75,10 @@ class OutPresenter(BasePresenter):
                 if item != None:
                     vl = item.text()
                     if vl.find('LOT') != -1:
-                        self.setRowSpan(row,differences[i]-1, 1,7)
+                        self.setRowSpan(row,differences[i]-1, 1,7) ### BUG TO FIX
                     else:
                         self.setRowSpan(row,differences[i], 1,7)
+                
                 
         self.view.tableView.resizeColumnsToContents()
         for row in nRows:
@@ -87,10 +89,18 @@ class OutPresenter(BasePresenter):
                 current_col_span = self.view.tableView.columnSpan(row, 0)
                 if current_row_span > 1 or current_col_span > 1:
                     self.view.tableView.setSpan(row, 0, 1, 1)  # Restoring to original span (1x1)
+                    
     def setRowSpan(self, row, rowSpan, start, end):
         for i in range(start, end):
             self.view.tableView.setSpan(row, i, rowSpan, 1)
-    
+            #print(f'here -> i:{i} row:{row} rowSpan:{rowSpan}')
+            
+    def restoreRowSpan(self, row, col):
+        current_row_span = self.view.tableView.rowSpan(row, 0)
+        current_col_span = self.view.tableView.columnSpan(row, 0)
+        if current_row_span > 1 or current_col_span > 1:
+            self.view.tableView.setSpan(row, col, 1, 1) 
+            
     def mouseRightClick(self, event):
         
         selectedItems = self.view.tableView.selectedItems()
