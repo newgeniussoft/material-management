@@ -60,11 +60,11 @@ class DepotPresenter(BasePresenter):
             if idItem.find('LOT') == -1:
                 action = MenuAction(self)
                 menu = RoundMenu(parent=self.view)
-                #menu.addAction(Action(FluentIcon.FOLDER, 'Voir', triggered = lambda:action.show(matricule_item)))
-                '''menu.addAction(Action(FluentIcon.EDIT, 'Modifier', triggered = lambda: action.update(idItem)))'''
-                menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
-                menu.addSeparator()
-                menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(idItem)))
+                selectedRows = self.view.tableView.selectedRows()
+                if selectedItems[len(selectedItems)-2].text() == "" and len(selectedRows) == 1:
+                    menu.addAction(Action(FluentIcon.SHARE, 'Mouvement', triggered = lambda: self.showDialog(idItem)))
+                    menu.addSeparator()
+                menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered = lambda: action.confirmDelete(self.view.tableView, selectedRows)))
 
                 self.posCur = QCursor().pos()
                 cur_x = self.posCur.x()

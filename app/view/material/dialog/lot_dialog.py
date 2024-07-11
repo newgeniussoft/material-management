@@ -72,6 +72,8 @@ class LotDialog(Dialog):
             self.table.setItem(len(data), 1, QTableWidgetItem(str(text)))
         else:
             self.table.setItem(self.rowEdit, 1, QTableWidgetItem(str(text)))
+            
+        self.table.resizeColumnsToContents()
         self.clearEdit()
         
     def __nameChange(self, value):

@@ -55,6 +55,7 @@ class ReintMaterialDialog(Dialog):
         self.row_2 = QHBoxLayout()
         self.gradeEdit = LineEditWithLabel("GRADE")
         self.fullNameEdit = LineEditWithLabel("NOM ET PRENOMS")
+        self.fullNameEdit.lineEdit.textChanged.connect(self.__isValid)
         self.contactEdit = LineEditWithLabel("CONTACT")
         self.gradeEdit.lineEdit.setReadOnly(True)
         self.fullNameEdit.lineEdit.setReadOnly(True)
@@ -64,8 +65,9 @@ class ReintMaterialDialog(Dialog):
         self.row_2.addLayout(self.contactEdit)
         
         self.row_3 = QHBoxLayout()
-        self.countInGood = SpinBoxEditWithLabel('Nombre')
-        self.countInGood.spinbox.textChanged.connect(self.__inGoodChanged)
+        self.countInGood = LineEditWithLabel('Nombre')
+        self.countInGood.lineEdit.setReadOnly(True)
+        self.countInGood.lineEdit.textChanged.connect(self.__inGoodChanged)
         self.dateReintegEdit = DateEditWithLabel("DATE DE REINTEGRATION")
         self.dateReintegEdit.setDateNow()
         self.stateMatIntegr = ComboxEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION", ['BONNE ETAT', 'EN PANNE'])
@@ -82,6 +84,7 @@ class ReintMaterialDialog(Dialog):
         self.textLayout.addLayout(self.row_3)
         self.setFixedWidth(600)
         self.__setData(material)
+        self.yesButton.setEnabled(False)
         
     def __setData(self, material:Material):
         self.nameEdit.setText(material.name)
@@ -91,7 +94,7 @@ class ReintMaterialDialog(Dialog):
         self.breakdownSpinBox.lineEdit.setText(str(material.breakdown))
         
     def __inGoodChanged(self, value):
-        inGood = self.countInGood.spinbox.value()
+        inGood = self.countInGood.lineEdit.text()
         state = self.stateMatIntegr.combox.currentText()
         self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) + int(inGood)))
         if state == 'BONNE ETAT':
@@ -100,14 +103,8 @@ class ReintMaterialDialog(Dialog):
         else:
             self.breakdownSpinBox.lineEdit.setText(str(int(self.material.breakdown) + int(inGood)))
             self.beSpinBox.lineEdit.setText(str(self.material.be))
+        self.__isValid()
             
-    def __moveChanged(self, value):
-        if value == "PERCEPTION":
-            self.stateMatIntegr.combox.setEnabled(False)
-        else:
-            self.stateMatIntegr.combox.setEnabled(True)
-            
-    
     def addAccessory(self):
         labelEdit = self.accessoryEdit.lineEdit
         self.accessory.append([self.accCountSpinBox.spinbox.value(),labelEdit.text()])
@@ -129,17 +126,10 @@ class ReintMaterialDialog(Dialog):
             if acc[0] == int(items[0].text()) and acc[1] == items[1].text():
                 self.accessory.remove(acc)
         self.accTable.setData(self.accessory)
-        
-    def __isAccValid(self, value):
-        cnt = self.accCountSpinBox.spinbox.value()
-        text = self.accessoryEdit.lineEdit.text()
-        if len(text) > 3 and cnt > 0:
-            self.btnAddAccessory.setEnabled(True)
-        else:
-            self.btnAddAccessory.setEnabled(False)
             
-    def __isValid(self, text):
-        name = self.nameEdit.lineEdit.text()
-        nType = self.typeEdit.lineEdit.text()
-        count = self.countSpinBox.spinbox.value()
-        self.yesButton.setEnabled(len(name) > 2 and len(nType) > 2 and count > 0)
+    def __isValid(self, value = None):
+        inGood = int(self.countInGood.lineEdit.text())
+        isValid = True
+        if inGood == 0:
+            isValid = False
+        self.yesButton.setEnabled(isValid)

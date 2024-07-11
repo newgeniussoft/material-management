@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QTableWidgetItem
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
 from ..models import MaterialModel, Mouvement, MouvementModel, Material
 from .base_presenter import BasePresenter
+from .menu_presenter import MenuAction
 from ..view import OutTab, ReintMaterialDialog
 
 class OutPresenter(BasePresenter):
@@ -73,9 +74,9 @@ class OutPresenter(BasePresenter):
                 if item != None:
                     vl = item.text()
                     if vl.find('LOT') != -1:
-                        self.setRowSpan(row,differences[i]-1, 1,6)
+                        self.setRowSpan(row,differences[i]-1, 1,7)
                     else:
-                        self.setRowSpan(row,differences[i], 1,6)
+                        self.setRowSpan(row,differences[i], 1,7)
                 
         self.view.tableView.resizeColumnsToContents()
         for row in nRows:
@@ -94,35 +95,36 @@ class OutPresenter(BasePresenter):
         
         selectedItems = self.view.tableView.selectedItems()
         if (len(selectedItems) != 0):
-            if selectedItems[len(selectedItems)-2].text() == "":
-                idItem = selectedItems[0].text()
-                menu = RoundMenu(parent=self.view)
+            idItem = selectedItems[0].text()
+            action = MenuAction(self)
+            menu = RoundMenu(parent=self.view)
+            selectedRows = self.view.tableView.selectedRows()
+            if selectedItems[len(selectedItems)-2].text() == "" and len(selectedRows) == 1:
                 menu.addAction(Action(FluentIcon.SHARE, 'Réintegration', triggered=lambda: self.showDialog(idItem)))
+            menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered=lambda: action.confirmDel(self.view.tableView, selectedRows)))
 
-                self.posCur = QCursor().pos()
-                cur_x = self.posCur.x()
-                cur_y = self.posCur.y()
-                menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
+            self.posCur = QCursor().pos()
+            cur_x = self.posCur.x()
+            cur_y = self.posCur.y()
+            menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
             
     def showDialog(self, idItem):
         move = self.moveModel.fetch_all(id=idItem)[0]
         material = self.model.fetch_all(id=move.material_id)[0]
         dialog = ReintMaterialDialog(material, self.view)
-        dialog.countInGood.spinbox.setValue(move.in_good)
-        dialog.countInGood.spinbox.setMaximum(move.in_good)
+        dialog.countInGood.lineEdit.setText(str(move.in_good))
         dialog.gradeEdit.setText(str(move.grade))
         dialog.fullNameEdit.setText(str(move.full_name))
         dialog.contactEdit.setText(str(move.contact))
         if dialog.exec():
-            inGood = dialog.countInGood.spinbox.value()
-            nInGood = str(int(material.in_good) - inGood)
+            inGood = dialog.countInGood.lineEdit.text()
+            nInGood = str(int(material.in_good) - int(inGood))
             inStore = dialog.inStoreSpinBox.lineEdit.text()
             be = dialog.beSpinBox.lineEdit.text()
             breakdown = dialog.breakdownSpinBox.lineEdit.text()
             dateReinteg =  dialog.dateReintegEdit.text()
             state = dialog.stateMatIntegr.combox.currentText()
-            self.moveModel.update_item(idItem, 
-                                       in_good          = nInGood, 
+            self.moveModel.update_item(idItem,
                                        date_reinteg     = dateReinteg,
                                        state_mat_integr = state)
             self.model.update_item(material.id, 
