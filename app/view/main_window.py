@@ -112,7 +112,7 @@ class MainWindow(FluentWindow):
         self.setMinimumWidth(760)
         self.setMicaEffectEnabled(cfg.get(cfg.micaEnabled))
         self.fluentTitleBar = FluentTitleBar(self)
-        self.fluentTitleBar.setIcon(QIcon('app/resource/images/logo_eniap.png'))
+        #self.fluentTitleBar.setIcon(QIcon('app/resource/images/logo_eniap.png'))
         self.fluentTitleBar.titleLabel.setText('Gestion de materiel')
         self.setTitleBar(self.fluentTitleBar)
 
