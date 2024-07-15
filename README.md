@@ -24,11 +24,11 @@
 ### TODO
 - Hide menu on title Lot [OK]
 - Delete movements with material[OK]
-- Maximize in_good value in perception with value in be in store
+- Maximize in_good value in perception with value in be in store [OK]
 - zero value invalid
-    - perception
-    - reintegration
-- Fullname required
-- Hide menu in select two rows
-- Selection
-- Delete multiple
+    - perception [OK]
+    - reintegration [OK]
+- Fullname required [OK]
+- Hide menu in select two rows [OK]
+- Selection [OK]
+- Delete multiple [OK]

@@ -36,6 +36,12 @@ class TableView(QTableWidget):
         #self.header.setSectionResizeMode(len(labels) - 1, QHeaderView.Stretch)
         return super().setHorizontalHeaderLabels(labels)
     
+    def selectedRows(self):
+        selected_rows = set()  # Use a set to store unique row indices
+        for item in self.selectedItems():
+            selected_rows.add(item.row())
+        return selected_rows
+            
     def getHeaderLabels(self):
         header_labels = []
         for column in range(self.columnCount()):

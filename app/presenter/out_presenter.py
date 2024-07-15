@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QTableWidgetItem
 from qfluentwidgets import RoundMenu, Action, FluentIcon, MenuAnimationType
 from ..models import MaterialModel, Mouvement, MouvementModel, Material
 from .base_presenter import BasePresenter
+from .menu_presenter import MenuAction
 from ..view import OutTab, ReintMaterialDialog
 
 class OutPresenter(BasePresenter):
@@ -15,7 +16,7 @@ class OutPresenter(BasePresenter):
         self.view: OutTab = parent.view.outInterface
         self.refresh.connect(lambda: self.fetchData([]))
         self.labels = ["ID", "DESIGNATION DE MATERIEL", "EN COMPTE", "EN BON", 
-                                   "EN MAGASIN","BE","PANNE", "QUANTITE", "GRADE", "NOM ET PRENOM", 
+                                   "EN MAGASIN","EN MAGASIN\nBE","EN MAGASIN\nPANNE", "QTE","BE","PANNE", "GRADE", "NOM ET PRENOM", 
                                    "CONTACT", "MOTIF", "LIEU", "DATE DE PERCEPTION", 
                                    "DATE DE REINTEGRATION", "ETAT DU MAT LORS \nDE LA REINTEGRATION"]
         self.setTableHeaderLabels(self.labels)
@@ -24,7 +25,7 @@ class OutPresenter(BasePresenter):
     def fetchData(self, data):
         columns = ['mouvements.id', 'materials.name', 'materials.into_account',
              'materials.in_good', 'materials.in_store', 
-             'materials.be', 'materials.breakdown', 'mouvements.in_good',
+             'materials.be', 'materials.breakdown', 'mouvements.in_good', 'mouvements.be', 'mouvements.breakdown',
              'mouvements.grade','mouvements.full_name', 'mouvements.contact', 
              'mouvements.motif','mouvements.place', 'mouvements.date_perc',  
              'mouvements.date_reinteg', 'mouvements.state_mat_integr']
@@ -47,6 +48,7 @@ class OutPresenter(BasePresenter):
         nRows = []
         self.view.progressBar.setVisible(False)
         nData = [list(item) for item in data]
+        self.view.tableView.setRowCount(0)
         self.view.tableView.setRowCount(len(nData))
         for i, item in enumerate(nData):
             nRows.append(i)
@@ -73,9 +75,10 @@ class OutPresenter(BasePresenter):
                 if item != None:
                     vl = item.text()
                     if vl.find('LOT') != -1:
-                        self.setRowSpan(row,differences[i]-1, 1,6)
+                        self.setRowSpan(row,differences[i]-1, 1,7) ### BUG TO FIX
                     else:
-                        self.setRowSpan(row,differences[i], 1,6)
+                        self.setRowSpan(row,differences[i], 1,7)
+                
                 
         self.view.tableView.resizeColumnsToContents()
         for row in nRows:
@@ -86,45 +89,61 @@ class OutPresenter(BasePresenter):
                 current_col_span = self.view.tableView.columnSpan(row, 0)
                 if current_row_span > 1 or current_col_span > 1:
                     self.view.tableView.setSpan(row, 0, 1, 1)  # Restoring to original span (1x1)
+                    
     def setRowSpan(self, row, rowSpan, start, end):
         for i in range(start, end):
             self.view.tableView.setSpan(row, i, rowSpan, 1)
-    
+            #print(f'here -> i:{i} row:{row} rowSpan:{rowSpan}')
+            
+    def restoreRowSpan(self, row, col):
+        current_row_span = self.view.tableView.rowSpan(row, 0)
+        current_col_span = self.view.tableView.columnSpan(row, 0)
+        if current_row_span > 1 or current_col_span > 1:
+            self.view.tableView.setSpan(row, col, 1, 1) 
+            
     def mouseRightClick(self, event):
         
         selectedItems = self.view.tableView.selectedItems()
         if (len(selectedItems) != 0):
-            if selectedItems[len(selectedItems)-2].text() == "":
-                idItem = selectedItems[0].text()
-                menu = RoundMenu(parent=self.view)
+            idItem = selectedItems[0].text()
+            action = MenuAction(self)
+            menu = RoundMenu(parent=self.view)
+            selectedRows = self.view.tableView.selectedRows()
+            if selectedItems[len(selectedItems)-2].text() == "" and len(selectedRows) == 1:
                 menu.addAction(Action(FluentIcon.SHARE, 'Réintegration', triggered=lambda: self.showDialog(idItem)))
+            menu.addAction(Action(FluentIcon.DELETE, 'Supprimer', triggered=lambda: action.confirmDel(self.view.tableView, selectedRows)))
 
-                self.posCur = QCursor().pos()
-                cur_x = self.posCur.x()
-                cur_y = self.posCur.y()
-                menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
+            self.posCur = QCursor().pos()
+            cur_x = self.posCur.x()
+            cur_y = self.posCur.y()
+            menu.exec(QPoint(cur_x, cur_y), aniType=MenuAnimationType.FADE_IN_DROP_DOWN)
             
     def showDialog(self, idItem):
         move = self.moveModel.fetch_all(id=idItem)[0]
         material = self.model.fetch_all(id=move.material_id)[0]
         dialog = ReintMaterialDialog(material, self.view)
-        dialog.countInGood.spinbox.setValue(move.in_good)
-        dialog.countInGood.spinbox.setMaximum(move.in_good)
+        dialog.countInGood.lineEdit.setText(str(move.in_good))
+        dialog.countBe.spinbox.setValue(int(move.in_good))
+        dialog.countBe.spinbox.setMaximum(int(move.in_good))
+        dialog.countBreakdown.spinbox.setMaximum(int(move.in_good))
         dialog.gradeEdit.setText(str(move.grade))
         dialog.fullNameEdit.setText(str(move.full_name))
         dialog.contactEdit.setText(str(move.contact))
         if dialog.exec():
-            inGood = dialog.countInGood.spinbox.value()
-            nInGood = str(int(material.in_good) - inGood)
+            inGood = dialog.countInGood.lineEdit.text()
+            nInGood = str(int(material.in_good) - int(inGood))
             inStore = dialog.inStoreSpinBox.lineEdit.text()
             be = dialog.beSpinBox.lineEdit.text()
             breakdown = dialog.breakdownSpinBox.lineEdit.text()
+            nBreakdown = dialog.countBreakdown.spinbox.value()
+            nBe = dialog.countBe.spinbox.value()
             dateReinteg =  dialog.dateReintegEdit.text()
-            state = dialog.stateMatIntegr.combox.currentText()
-            self.moveModel.update_item(idItem, 
-                                       in_good          = nInGood, 
-                                       date_reinteg     = dateReinteg,
-                                       state_mat_integr = state)
+            state = 'EN PANNE' if nBreakdown > 0 else 'BONNE ETAT'
+            self.moveModel.update_item(idItem,
+                                       breakdown       = str(nBreakdown),
+                                       be              = str(nBe),
+                                       state_mat_integr= state,
+                                       date_reinteg    = dateReinteg)
             self.model.update_item(material.id, 
                                    in_good  = nInGood,
                                    in_store = inStore,

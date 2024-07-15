@@ -61,6 +61,7 @@ class MouvementMaterialDialog(Dialog):
         self.row_3 = QHBoxLayout()
         self.gradeEdit = LineEditWithLabel("GRADE")
         self.fullNameEdit = LineEditWithLabel("NOM ET PRENOMS")
+        self.fullNameEdit.lineEdit.textChanged.connect(self.__isValid)
         self.contactEdit = LineEditWithLabel("CONTACT")
         self.row_3.addLayout(self.gradeEdit)
         self.row_3.addLayout(self.fullNameEdit)
@@ -80,12 +81,15 @@ class MouvementMaterialDialog(Dialog):
         self.textLayout.addLayout(self.row_4)
         self.setFixedWidth(600)
         self.__setData(material)
+        self.yesButton.setEnabled(False)
         
     def __setData(self, material:Material):
         self.nameEdit.setText(material.name)
         self.intoAccountSpinBox.lineEdit.setText(str(material.into_account))
         self.inStoreSpinBox.lineEdit.setText(str(material.in_store))
         self.beSpinBox.lineEdit.setText(str(material.be))
+        self.countInGood.spinbox.setValue(int(material.be))
+        self.countInGood.spinbox.setMaximum(int(material.be))
         self.breakdownSpinBox.lineEdit.setText(str(material.breakdown))
         
     def __inGoodChanged(self, value):
@@ -93,14 +97,8 @@ class MouvementMaterialDialog(Dialog):
         self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) - int(inGood)))
         self.breakdownSpinBox.lineEdit.setText(str(self.material.breakdown))
         self.beSpinBox.lineEdit.setText(str(int(self.material.be) - int(inGood)))
+        self.__isValid()
             
-    def __moveChanged(self, value):
-        if value == "PERCEPTION":
-            self.stateMatIntegr.combox.setEnabled(False)
-        else:
-            self.stateMatIntegr.combox.setEnabled(True)
-            
-    
     def addAccessory(self):
         labelEdit = self.accessoryEdit.lineEdit
         self.accessory.append([self.accCountSpinBox.spinbox.value(),labelEdit.text()])
@@ -122,17 +120,12 @@ class MouvementMaterialDialog(Dialog):
             if acc[0] == int(items[0].text()) and acc[1] == items[1].text():
                 self.accessory.remove(acc)
         self.accTable.setData(self.accessory)
-        
-    def __isAccValid(self, value):
-        cnt = self.accCountSpinBox.spinbox.value()
-        text = self.accessoryEdit.lineEdit.text()
-        if len(text) > 3 and cnt > 0:
-            self.btnAddAccessory.setEnabled(True)
-        else:
-            self.btnAddAccessory.setEnabled(False)
             
-    def __isValid(self, text):
-        name = self.nameEdit.lineEdit.text()
-        nType = self.typeEdit.lineEdit.text()
-        count = self.countSpinBox.spinbox.value()
-        self.yesButton.setEnabled(len(name) > 2 and len(nType) > 2 and count > 0)
+    def __isValid(self, value = None):
+        inGood = self.countInGood.spinbox.value()
+        isValid = True
+        if inGood == 0:
+            isValid = False
+        if len(self.fullNameEdit.text()) < 3:
+            isValid = False
+        self.yesButton.setEnabled(isValid)
