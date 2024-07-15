@@ -16,7 +16,7 @@ class OutPresenter(BasePresenter):
         self.view: OutTab = parent.view.outInterface
         self.refresh.connect(lambda: self.fetchData([]))
         self.labels = ["ID", "DESIGNATION DE MATERIEL", "EN COMPTE", "EN BON", 
-                                   "EN MAGASIN","BE","PANNE", "QUANTITE", "GRADE", "NOM ET PRENOM", 
+                                   "EN MAGASIN","EN MAGASIN\nBE","EN MAGASIN\nPANNE", "QTE","BE","PANNE", "GRADE", "NOM ET PRENOM", 
                                    "CONTACT", "MOTIF", "LIEU", "DATE DE PERCEPTION", 
                                    "DATE DE REINTEGRATION", "ETAT DU MAT LORS \nDE LA REINTEGRATION"]
         self.setTableHeaderLabels(self.labels)
@@ -25,7 +25,7 @@ class OutPresenter(BasePresenter):
     def fetchData(self, data):
         columns = ['mouvements.id', 'materials.name', 'materials.into_account',
              'materials.in_good', 'materials.in_store', 
-             'materials.be', 'materials.breakdown', 'mouvements.in_good',
+             'materials.be', 'materials.breakdown', 'mouvements.in_good', 'mouvements.be', 'mouvements.breakdown',
              'mouvements.grade','mouvements.full_name', 'mouvements.contact', 
              'mouvements.motif','mouvements.place', 'mouvements.date_perc',  
              'mouvements.date_reinteg', 'mouvements.state_mat_integr']
@@ -135,10 +135,15 @@ class OutPresenter(BasePresenter):
             inStore = dialog.inStoreSpinBox.lineEdit.text()
             be = dialog.beSpinBox.lineEdit.text()
             breakdown = dialog.breakdownSpinBox.lineEdit.text()
+            nBreakdown = dialog.countBreakdown.spinbox.value()
+            nBe = dialog.countBe.spinbox.value()
             dateReinteg =  dialog.dateReintegEdit.text()
-            #state = dialog.stateMatIntegr.combox.currentText()
+            state = 'EN PANNE' if nBreakdown > 0 else 'BONNE ETAT'
             self.moveModel.update_item(idItem,
-                                       date_reinteg     = dateReinteg)
+                                       breakdown       = str(nBreakdown),
+                                       be              = str(nBe),
+                                       state_mat_integr= state,
+                                       date_reinteg    = dateReinteg)
             self.model.update_item(material.id, 
                                    in_good  = nInGood,
                                    in_store = inStore,

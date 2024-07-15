@@ -12,6 +12,8 @@ class Mouvement(Entity):
     contact: str = ""
     motif: str = ""
     place: str = ""
+    be: int = 0
+    breakdown: int = 0
     date_perc: str = ""
     date_reinteg: str = ""
     state_mat_integr: str = ""

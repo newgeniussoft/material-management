@@ -119,11 +119,18 @@ class ReintMaterialDialog(Dialog):
         inGood = self.countInGood.lineEdit.text()
         breakdown = int(inGood) - int(value)
         self.countBreakdown.spinbox.setValue(breakdown)
+        self.breakdownSpinBox.lineEdit.setText(str(int(self.material.breakdown) + int(breakdown)))
+        self.beSpinBox.lineEdit.setText(str(int(self.material.be) + int(value)))
+        self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) + int(inGood)))
+        #print(f'old:{self.material.breakdown} new:{int(self.material.breakdown) + int(breakdown)}')
         
     def __breakdownOnChanged(self, value):
         inGood = self.countInGood.lineEdit.text()
         be = int(inGood) - int(value)
         self.countBe.spinbox.setValue(be)
+        self.breakdownSpinBox.lineEdit.setText(str(int(self.material.breakdown) + int(value)))
+        self.beSpinBox.lineEdit.setText(str(int(self.material.be) + int(be)))
+        self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) + int(inGood)))
             
     def addAccessory(self):
         labelEdit = self.accessoryEdit.lineEdit

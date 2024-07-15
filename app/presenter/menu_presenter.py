@@ -39,8 +39,8 @@ class MenuAction:
             be = material.be
             breakdown = material.breakdown
             if move.state_mat_integr == 'EN PANNE':
-                breakdown = int(material.breakdown) - int(move.in_good)
-                be = int(material.be) + int(move.in_good)
+                breakdown = int(material.breakdown) - int(move.breakdown)
+                be = int(material.be) + int(move.breakdown)
             elif move.state_mat_integr == 'BONNE ETAT':
                 pass
             else:
