@@ -123,6 +123,9 @@ class OutPresenter(BasePresenter):
         material = self.model.fetch_all(id=move.material_id)[0]
         dialog = ReintMaterialDialog(material, self.view)
         dialog.countInGood.lineEdit.setText(str(move.in_good))
+        dialog.countBe.spinbox.setValue(int(move.in_good))
+        dialog.countBe.spinbox.setMaximum(int(move.in_good))
+        dialog.countBreakdown.spinbox.setMaximum(int(move.in_good))
         dialog.gradeEdit.setText(str(move.grade))
         dialog.fullNameEdit.setText(str(move.full_name))
         dialog.contactEdit.setText(str(move.contact))
@@ -133,10 +136,9 @@ class OutPresenter(BasePresenter):
             be = dialog.beSpinBox.lineEdit.text()
             breakdown = dialog.breakdownSpinBox.lineEdit.text()
             dateReinteg =  dialog.dateReintegEdit.text()
-            state = dialog.stateMatIntegr.combox.currentText()
+            #state = dialog.stateMatIntegr.combox.currentText()
             self.moveModel.update_item(idItem,
-                                       date_reinteg     = dateReinteg,
-                                       state_mat_integr = state)
+                                       date_reinteg     = dateReinteg)
             self.model.update_item(material.id, 
                                    in_good  = nInGood,
                                    in_store = inStore,

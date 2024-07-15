@@ -68,13 +68,23 @@ class ReintMaterialDialog(Dialog):
         self.countInGood = LineEditWithLabel('Nombre')
         self.countInGood.lineEdit.setReadOnly(True)
         self.countInGood.lineEdit.textChanged.connect(self.__inGoodChanged)
+        
+        self.countBe= SpinBoxEditWithLabel('BE')
+        self.countBe.spinbox.textChanged.connect(self.__beOnChanged)
+        
+        self.countBreakdown= SpinBoxEditWithLabel('EN PANNE')
+        self.countBreakdown.spinbox.textChanged.connect(self.__breakdownOnChanged)
+        
+        
         self.dateReintegEdit = DateEditWithLabel("DATE DE REINTEGRATION")
         self.dateReintegEdit.setDateNow()
-        self.stateMatIntegr = ComboxEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION", ['BONNE ETAT', 'EN PANNE'])
-        self.stateMatIntegr.combox.currentTextChanged.connect(self.__inGoodChanged)
+        '''self.stateMatIntegr = ComboxEditWithLabel("ETAT DU MAT LORS DE LA REINTEGRATION", ['BONNE ETAT', 'EN PANNE'])
+        self.stateMatIntegr.combox.currentTextChanged.connect(self.__inGoodChanged)'''
         self.row_3.addLayout(self.countInGood)
+        self.row_3.addLayout(self.countBe)
+        self.row_3.addLayout(self.countBreakdown)
         self.row_3.addLayout(self.dateReintegEdit)
-        self.row_3.addLayout(self.stateMatIntegr)
+        #self.row_3.addLayout(self.stateMatIntegr)
 
         # add widget to view layout
         self.textLayout.addWidget(self.titleLabel)
@@ -95,15 +105,25 @@ class ReintMaterialDialog(Dialog):
         
     def __inGoodChanged(self, value):
         inGood = self.countInGood.lineEdit.text()
-        state = self.stateMatIntegr.combox.currentText()
+        '''state = self.stateMatIntegr.combox.currentText()
         self.inStoreSpinBox.lineEdit.setText(str(int(self.material.in_store) + int(inGood)))
         if state == 'BONNE ETAT':
             self.beSpinBox.lineEdit.setText(str(int(self.material.be) + int(inGood)))
             self.breakdownSpinBox.lineEdit.setText(str(self.material.breakdown))
         else:
             self.breakdownSpinBox.lineEdit.setText(str(int(self.material.breakdown) + int(inGood)))
-            self.beSpinBox.lineEdit.setText(str(self.material.be))
+            self.beSpinBox.lineEdit.setText(str(self.material.be))'''
         self.__isValid()
+        
+    def __beOnChanged(self, value):
+        inGood = self.countInGood.lineEdit.text()
+        breakdown = int(inGood) - int(value)
+        self.countBreakdown.spinbox.setValue(breakdown)
+        
+    def __breakdownOnChanged(self, value):
+        inGood = self.countInGood.lineEdit.text()
+        be = int(inGood) - int(value)
+        self.countBe.spinbox.setValue(be)
             
     def addAccessory(self):
         labelEdit = self.accessoryEdit.lineEdit
